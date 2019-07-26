@@ -1,0 +1,130 @@
+$primary:       #6b4c9f !default;
+$gray-400:      #ced4da !default;
+$light:         #f0edf5 !default;
+
+$theme-colors: (
+  "primary": $primary
+);
+
+// Import custom font from Google
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700,900');
+
+$font-family-sans-serif:      "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+$font-size-base:              ((1rem/16) * 14) !default; // Assumes the browser default, typically `16px`
+
+// Components
+$border-width:                2px !default;
+$border-radius:               .50rem !default;
+$border-radius-sm:            .2rem !default;
+$border-radius-lg:            .50rem !default;
+
+// Buttons + Forms
+$input-btn-padding-y:         ((1rem / 57) * 54)  !default;
+$input-btn-padding-x:         1rem !default;
+
+$input-btn-padding-y-lg:      ((1rem / 57) * 54) !default;
+$input-btn-padding-x-lg:      1rem !default;
+
+$input-focus-box-shadow: 0;
+$component-active-bg: $primary;
+$input-focus-border-color: $component-active-bg !default;
+$input-placeholder-color:               $gray-400 !default;
+
+$custom-select-focus-box-shadow: 0;
+$custom-select-focus-border-color:  $component-active-bg !default;
+
+$form-group-margin-bottom:              1.5rem !default;
+
+$custom-checkbox-indicator-border-radius: .25rem !default;
+
+// Modals
+$modal-header-border-color:         white !default;
+$modal-inner-padding:               1rem 2rem 1rem 2rem !default;
+$modal-header-padding:              1rem 2rem 1rem 2rem !default;
+
+// Bootstrap and its default variables
+@import "node_modules/bootstrap/scss/bootstrap";
+
+
+// Overriding
+.form-control {
+  font-size: 1rem;
+}
+
+.btn, .btn-group {
+  font-size: $font-size-base;
+  font-weight: bold;
+}
+
+.btn-sm {
+  height: 45px;
+  font-weight: 500;
+  border-radius: 8px;
+  img {
+    margin-right: 8px;
+  }
+}
+
+.btn-light {
+  color: #6b4c9f;
+  /* background-color: rgba(107,76,159,.1);
+  border: 2px solid rgba(107,76,159,.1); */
+
+  &:hover {
+    color: #6b4c9f;
+  }
+}
+
+.col-form-label {
+  padding-bottom: ((1rem / 16) * 10);
+}
+
+
+// Global
+.body-gray {
+  background-color: #f7f8f9;
+}
+
+.box {
+  border: 0;
+  box-shadow: 0 8px 14px 0 rgba(224,229,238,.5);
+  margin-bottom: 32px;
+
+  .card-body {
+    padding: 1.25rem 2rem 2rem;
+  }
+}
+
+.input-with-icon {
+  padding-left: 45px;
+}
+
+.input-icon-wrapper {
+position: relative;
+/* display: flex; */
+align-items: center;
+justify-content: center;
+/* height: 54px;
+width: 20px;
+top: -55px;
+left: 17px;*/
+height: 0px;
+width: 20px;
+top: -38px;
+left: 17px;
+
+  img {
+    vertical-align: middle;
+    border-style: none;
+  }
+}
+
+.invalid-feedback {
+  font-size: 90%;
+
+  ul {
+    padding: 0;
+    padding-left: 17px;
+    // list-style-type: none;
+  }
+}
