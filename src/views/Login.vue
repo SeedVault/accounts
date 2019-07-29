@@ -13,7 +13,10 @@
             </strong>
           </p>
         </div>
-        <form @submit.prevent.once="login">
+
+        <validation-box id="_" :validationErrors="validationErrors"></validation-box>
+
+        <form @submit.prevent="login">
 
           <input-text v-model="email" id="email" label="E-mail address" placeholder="Your email"
           type="text" icon="outline-mail-24px@2x.svg" :validationErrors="validationErrors"></input-text>

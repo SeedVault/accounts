@@ -2,10 +2,10 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var helmet = require('helmet');
 var loginRouter = require('./routes/login');
-// var logoutRouter = require('./routes/logout');
 var consentRouter = require('./routes/consent');
+var logoutRouter = require('./routes/logout');
 var Knex = require('knex');
-var knexConfig = require('../../knexfile');
+var knexConfig = require('../knexfile');
 var { Model } = require('objection');
 
 module.exports = function(app) {
@@ -28,7 +28,7 @@ module.exports = function(app) {
 
   app.use('/server/login', loginRouter);
   app.use('/server/consent', consentRouter);
-  // app.use('/server/logout', logoutRouter);
+  app.use('/server/logout', logoutRouter);
 
 
   /*

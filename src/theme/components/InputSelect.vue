@@ -1,9 +1,16 @@
 <template>
   <div class="form-group">
     <label :for="id">{{ label }}</label>
-    <select :id="id" v-model="inputValue" :options="options" :placeholder="placeholder"
+    <!-- <select :id="id" v-model="inputValue" :options="options" :placeholder="placeholder"
       :class="{'input-with-icon':true, 'form-control': true,
-      'is-invalid':(validationErrors[id] !== undefined)}"></select>
+      'is-invalid':(validationErrors[id] !== undefined)}"></select> -->
+    <b-form-select :id="id"
+      :placeholder="placeholder"
+      v-model="inputValue"
+      :options="options"
+      :class="{'input-with-icon':true, 'form-control': true,
+      'is-invalid':(validationErrors[id] !== undefined)}" />
+
     <icon-inside-input :icon="icon"></icon-inside-input>
     <validation-messages :id="id" :validationErrors="validationErrors"></validation-messages>
   </div>

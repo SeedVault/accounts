@@ -24,17 +24,16 @@
           accordance with their respective <a target="_blank" :href="app_tos_uri"> Terms of Service</a>
           and <a target="_blank" :href="app_policy_uri">Privacy policies</a>.
           </p>
-        <form @submit.prevent.once="login">
-
-            <div class="row">
+        <form @submit.prevent="submit">
+          <input id="grant_scope" name="grant_scope" type="hidden" :value="requested_scope" />
+          <div class="row">
             <div class="col-6">
-              <input type="submit" id="reject" name="reject" value="Reject" class="btn btn-secondary btn-lg btn-block" />
+              <input type="button" @click="consent(false)" id="reject" name="reject" value="Reject" class="btn btn-secondary btn-lg btn-block" />
             </div>
             <div class="col-6">
-              <input type="submit" id="allow" name="allow" value="Accept" class="btn btn-primary btn-lg btn-block" />
+              <input type="button" @click="consent(true)" id="allow" name="allow" value="Accept" class="btn btn-primary btn-lg btn-block" />
             </div>
-           </div>
-
+          </div>
         </form>
       </div>
       <div class="col-sm-4"></div>
@@ -52,7 +51,7 @@ export default {
       app_policy_uri: '',
       app_scope: [],
       app_tos_uri: '',
-      request_scope: '',
+      requested_scope: '',
       user: ''
     }
   },
@@ -73,10 +72,23 @@ export default {
       }
     }
     this.app_tos_uri = q.app_tos_uri;
-    this.request_scope = q.request_scope;
+    this.requested_scope = q.requested_scope;
     this.user = q.user;
   },
   methods: {
+    consent(allowValue) {
+      var that = this;
+      this.axios.post('/server/consent', {
+        allow: allowValue,
+        grant_scope: this.requested_scope.split(',')
+      })
+      .then(function (response) {
+        window.location.href = response.data.redirect;
+      })
+      .catch(function (error) {
+        alert(error.response.status);
+      });
+    }
   },
 };
 </script>

@@ -4,13 +4,28 @@ const { check, validationResult } = require('express-validator');
 var url = require('url');
 var hydra = require('../services/hydra');
 var Country = require('../models/Country');
-// var users = require('../controllers/users');
+var users = require('../controllers/users');
 
 // Sets up csrf protection
 var csrf = require('csurf');
-var csrfProtection = csrf({ cookie: true });
+var csrfProtection = csrf({ cookie: true, secure: true });
 
 router.use(csrfProtection);
+
+// Handle CSRF token errors
+router.use(function (err, req, res, next) {
+  if (err.code !== 'EBADCSRFTOKEN') return next(err);
+  var validationError = {
+    'errors': [
+      {'value': '',
+      'param': '_',
+      'location': 'body',
+      'msg': 'Invalid CSRF token',
+      }
+    ]
+  };
+  return res.status(422).json(validationError);
+});
 
 router.get('/', csrfProtection, async (req, res, next) => {
 
@@ -58,11 +73,7 @@ router.get('/', csrfProtection, async (req, res, next) => {
 });
 
 
-router.post('/', csrfProtection, [
-  check('email').exists().isEmail().withMessage('Must be a valid e-mail').not().isEmpty().withMessage('Required').isLength({ min: 10 }).withMessage('Al menos 10 letras'),
-  check('password').exists().not().isEmpty().withMessage('Required'),
-  check('remember').exists().not().isEmpty().isIn(['1', '0'])
-], function (req, res, next) {
+router.post('/', csrfProtection, users.validate('login'), function (req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
@@ -86,7 +97,18 @@ router.post('/', csrfProtection, [
     //  challenge: challenge,
     //  error: 'The username / password combination is not correct'
     //});
-    return res.status(400).json({ validationError: 'The username / password combination is not correct' });
+    var validationError = {
+      'errors': [
+        {'value': '',
+        'param': '_',
+        'location': 'body',
+        'msg': 'Wrong e-mail address or password. Try again or click Forgot password to reset it.',
+        }
+      ]
+    };
+    // {"errors":[{"value":"","msg":"Required","param":"password","location":"body"}]}
+    return res.status(422).json(validationError);
+    // return res.status(422).json({ validationError: 'The username / password combination is not correct' });
     // res.json({ error: '' });
     // return;
   }
@@ -94,11 +116,12 @@ router.post('/', csrfProtection, [
   // Seems like the user authenticated! Let's tell hydra...
   hydra.acceptLoginRequest(challenge, {
     // Subject is an alias for user ID. A subject can be a random string, a UUID, an email address, ....
-    subject: 'foo@bar.com',
+    subject: req.body.email,
 
     // This tells hydra to remember the browser and automatically authenticate the user in future requests. This will
     // set the "skip" parameter in the other route to true on subsequent requests!
-    remember: Boolean(req.body.remember),
+    remember: Boolean(parseInt(req.body.remember)),
+
 
     // When the session expires, in seconds. Set this to 0 so it will never expire.
     remember_for: 3600,

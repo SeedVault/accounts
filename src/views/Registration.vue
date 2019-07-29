@@ -52,13 +52,6 @@ export default {
       email: '',
       pass: '',
       country: null,
-      countries: [
-        { value: null, text: 'Please select an option' },
-        { value: 'a', text: 'This is First option' },
-        { value: 'b', text: 'Selected Option' },
-        { value: { 'C': '3PO' }, text: 'This is an option with object value' },
-        { value: 'd', text: 'This one is disabled', disabled: true }
-      ],
       error: false,
       validationErrors: []
     }
@@ -66,6 +59,11 @@ export default {
   methods: {
     signup () {
       alert('Signed up!')
+    }
+  },
+  computed: {
+    countries() {
+      return this.$store.state.countries;
     }
   }
 }

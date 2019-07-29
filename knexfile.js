@@ -25,10 +25,10 @@ module.exports = {
     },
     migrations: {
       tableName: 'migrations',
-      directory: `${ __dirname }/db/migrations`,
+      directory: `${ __dirname }/server/db/migrations`,
     },
     seeds: {
-      directory: `${ __dirname }/db/seeds`
+      directory: `${ __dirname }/server/db/seeds`
     },
   },
 
@@ -49,10 +49,10 @@ module.exports = {
     },
     migrations: {
       tableName: 'migrations',
-      directory: `${ __dirname }/db/migrations`,
+      directory: `${ __dirname }/server/db/migrations`,
     },
     seeds: {
-      directory: `${ __dirname }/db/seeds`
+      directory: `${ __dirname }/server/db/seeds`
     },
   },
 

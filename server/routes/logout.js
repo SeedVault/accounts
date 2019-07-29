@@ -14,16 +14,20 @@ router.get('/', csrfProtection, function (req, res, next) {
   // The challenge is used to fetch information about the logout request from ORY Hydra.
   var challenge = query.logout_challenge;
 
+
   hydra.getLogoutRequest(challenge)
   // This will be called if the HTTP request was successful
     .then(function (response) {
       // Here we have access to e.g. response.subject, response.sid, ...
 
       // The most secure way to perform a logout request is by asking the user if he/she really want to log out.
-      res.render('logout', {
+      /* res.render('logout', {
         csrfToken: req.csrfToken(),
         challenge: challenge,
-      });
+      }); */
+      res.cookie('XSRF-TOKEN', req.csrfToken(), {secure: true});
+      res.cookie('challenge', String(challenge), {secure: true});
+      res.redirect('/logout');
     })
     // This will handle any error that happens when making HTTP calls to hydra
     .catch(function (error) {
@@ -33,13 +37,14 @@ router.get('/', csrfProtection, function (req, res, next) {
 
 router.post('/', csrfProtection, function (req, res, next) {
   // The challenge is now a hidden input field, so let's take it from the request body instead
-  var challenge = req.body.challenge;
+  // var challenge = req.body.challenge;
+  var challenge = req.cookies.challenge;
 
-  if (req.body.submit === 'No') {
+  if (req.body.logout === false) {
     return hydra.rejectLogoutRequest(challenge)
       .then(function () {
         // The user did not want to log out. Let's redirect him back somewhere or do something else.
-        res.redirect('https://www.ory.sh/');
+        return res.json({redirect: 'https://www.seedtoken.io'});
       })
       // This will handle any error that happens when making HTTP calls to hydra
       .catch(function (error) {
@@ -51,7 +56,8 @@ router.post('/', csrfProtection, function (req, res, next) {
   hydra.acceptLogoutRequest(challenge)
     .then(function (response) {
       // All we need to do now is to redirect the user back to hydra!
-      res.redirect(response.redirect_to);
+      return res.json({redirect: response.redirect_to});
+      // res.redirect(response.redirect_to);
     })
     // This will handle any error that happens when making HTTP calls to hydra
     .catch(function (error) {

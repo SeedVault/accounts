@@ -1,4 +1,4 @@
-const configureAPI = require('./src/server/app');
+const configureAPI = require('./server/app');
 
 module.exports = {
   devServer: {

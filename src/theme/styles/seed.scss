@@ -128,3 +128,16 @@ left: 17px;
     // list-style-type: none;
   }
 }
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f5c6cb;
+  border-color: #f5c6cb;
+
+  ul {
+    padding: 0;
+    margin: 5px;
+    list-style-type: square;
+  }
+
+}
