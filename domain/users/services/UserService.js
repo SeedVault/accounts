@@ -56,7 +56,7 @@ class DisabledAccountError extends ValidationError {
 const UserService = {
 
   saveRegistrationForm: async (username, email, firstname, lastname, countryCode,
-    plaintextPassword) => {
+    role, plaintextPassword) => {
       // Save unverified user
       let user = new User({
         username,
@@ -64,6 +64,7 @@ const UserService = {
         firstname,
         lastname,
         countryCode,
+        role,
         password: plaintextPassword
       });
       return await user.save();

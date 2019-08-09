@@ -8,22 +8,19 @@
     <form @submit.prevent="signup">
 
       <input-text v-model="firstname" id="firstname" :label="$t('domain.user.first_name')"
-      placeholder="First name" type="text"
-      icon="outline-person-24px@2x.svg"
+      placeholder="First name" icon="outline-person-24px@2x.svg"
       :validationErrors="validationErrors"></input-text>
 
       <input-text v-model="lastname" id="lastname" :label="$t('domain.user.last_name')"
-        :placeholder="$t('domain.user.your_last_name')"  type="text"
-        icon="outline-person-24px@2x.svg"
+        :placeholder="$t('domain.user.your_last_name')" icon="outline-person-24px@2x.svg"
         :validationErrors="validationErrors"></input-text>
 
       <input-text v-model="username" id="username" :label="$t('domain.user.username')"
-      :placeholder="$t('domain.user.your_username')"
-      type="text" icon="outline-person-24px@2x.svg"
+      :placeholder="$t('domain.user.your_username')" icon="outline-person-24px@2x.svg"
       :validationErrors="validationErrors"></input-text>
 
       <input-text v-model="email" id="email" :label="$t('domain.user.email_address')"
-      :placeholder="$t('domain.user.your_email_address')" type="text"
+      :placeholder="$t('domain.user.your_email_address')"
       icon="outline-mail-24px@2x.svg" :validationErrors="validationErrors"></input-text>
 
       <input-select v-model="countryCode" :options="countries" id="countryCode"
@@ -31,10 +28,14 @@
       icon="outline-location_on-24px@2x.svg"
       :validationErrors="validationErrors"></input-select>
 
-      <input-text v-model="password" id="password" :label="$t('domain.user.password')"
-      :placeholder="$t('domain.user.your_password')"
-      type="password" icon="outline-lock-24px@2x.svg"
-      :validationErrors="validationErrors"></input-text>
+      <input-select v-model="role" :options="roles" id="role"
+      :label="$t('domain.user.role')" :placeholder="$t('domain.user.your_role')"
+      icon="outline-location_on-24px@2x.svg"
+      :validationErrors="validationErrors"></input-select>
+
+      <input-password v-model="password" id="password" :label="$t('domain.user.password')"
+      :placeholder="$t('domain.user.your_password')" icon="outline-lock-24px@2x.svg"
+      :validationErrors="validationErrors"></input-password>
 
       <input type="submit" id="accept" :value="$t('sign_up.sign_up_button')"
       class="btn btn-primary btn-lg btn-block"/>
@@ -58,7 +59,8 @@ export default {
       lastname: '',
       username: '',
       email: '',
-      country: null,
+      countryCode: 'US',
+      role: 'user',
       password: '',
       validationErrors: [],
     };
@@ -73,6 +75,7 @@ export default {
         lastname: this.lastname,
         email: this.email,
         countryCode: this.countryCode,
+        role: this.role,
         password: this.password,
       })
         .then(() => {
@@ -89,7 +92,27 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['countries']),
+    ...mapGetters(['allCountries', 'allRoles']),
+    roles: function () {
+      let roleList = [];
+      for (let i = 0; i < this.allRoles.length; i++) {
+        roleList.push({
+          value: this.allRoles[i],
+          text: this.$i18n.t(`domain.roles.${this.allRoles[i]}`),
+         });
+      }
+      return roleList;
+    },
+    countries: function () {
+      let countryList = [];
+      for (let i = 0; i < this.allCountries.length; i++) {
+        countryList.push({
+          value: this.allCountries[i],
+          text: this.$i18n.t(`domain.countries.${this.allCountries[i]}`),
+         });
+      }
+      return countryList;
+    },
   },
 };
 </script>

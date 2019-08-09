@@ -11,6 +11,7 @@ async function createUser(email, username) {
     'John',
     'Doe',
     'us',
+    'user',
     'secret',
   );
 }
