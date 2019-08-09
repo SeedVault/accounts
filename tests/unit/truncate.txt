@@ -1,0 +1,27 @@
+const credentials = `${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}`;
+const server = `${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`;
+const mongoUri = `mongodb://${credentials}@${server}`;
+const database = process.env.ACCOUNTS_TEST_DATABASE;
+
+const mongoose = require('mongoose');
+
+module.exports = {
+  truncate: async () => {
+    if (mongoose.connection.readyState === 0) {
+      await mongoose.connect(mongoUri,
+        {
+          dbName: database,
+          useNewUrlParser: true,
+          useCreateIndex: true,
+        });
+    }
+    for (const i in mongoose.connection.collections) {
+      await mongoose.connection.collections[i].deleteMany({});
+    }
+  },
+
+  close: async () => {
+    await mongoose.connection.close();
+  },
+
+};

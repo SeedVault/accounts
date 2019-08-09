@@ -1,8 +1,17 @@
 # SEED Accounts
 
 ## Project setup
-```
+
+1. Install project dependencies:
+
+```bash
 npm install
+```
+
+2. Create a symlink to the `.env` file located in the dev-environment folder:
+
+```bash
+ln -s ../dev-environment/.env
 ```
 
 ### Compiles and hot-reloads for development
@@ -25,23 +34,5 @@ npm run test
 npm run lint
 ```
 
-### Run database migrations
-```
-npm run db:migrate
-```
-
-### Create a new database migration
-```
-./node_modules/.bin/migration:make migration_name
-```
-
-### Run database seed files
-```
-npm run db:seed
-```
-
-
-### Create a new seed file
-```
-./node_modules/.bin/seed:make seed_name
-```
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

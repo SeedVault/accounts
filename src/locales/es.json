@@ -1,0 +1,101 @@
+{
+  "validation": {
+    "email": "Este valor no es una dirección de email válida.",
+    "csrf_token": "Token CSRF no válido.",
+    "option": "El valor seleccionado no es una opción válida.",
+    "regex": "Este valor no es válido.",
+    "required": "Este valor no debería estar vacío."
+  },
+  "domain": {
+    "user": {
+      "email_address": "Correo electrónico",
+      "your_email_address": "Tu correo electrónico",
+      "password": "Contraseña",
+      "your_password": "Tu contraseña",
+      "new_password": "Nueva contraseña",
+      "your_new_password": "Tu nueva contraseña",
+      "re_enter_new_password": "Reingrese la nueva contraseña",
+      "your_new_password_again": "Tu nueva contraseña (otra vez)",
+      "first_name": "Nombre",
+      "your_first_name": "Tu mobre",
+      "last_name": "Apellido",
+      "your_last_name": "Tu apellido",
+      "username": "Usuario",
+      "your_username": "Tu usuario",
+      "country": "País",
+      "your_country": "Tu país",
+      "validation": {
+        "unique_email": "El e-mail ya existe.",
+        "unique_username": "El nombre de usuario ya existe.",
+        "user_not_found": "El usuario no existe.",
+        "email_not_found": "El e-mail no existe.",
+        "account_disabled": "La cuenta ha sido deshabilitada",
+        "account_unverified": "La cuenta aún no ha sido verificada",
+        "invalid_credentials": "Credenciales no válidas",
+        "code_not_valid": "El código no es válido",
+        "passwords_dont_match": "Las contraseñas son diferentes"
+      }
+    }
+  },
+  "common": {
+    "privacy": "Privacidad",
+    "terms": "Condiciones",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "save": "Guardar"
+  },
+  "sign_in": {
+    "or": "ó",
+    "sign_in": "Iniciar sesión",
+    "sign_up": "crear cuenta",
+    "sign_in_button": "Ingresar",
+    "forgot_password": "¿Olvidaste tu constraseña?",
+    "keep_me_logged_in": "Recuérdame"
+  },
+  "sign_up": {
+    "sign_up": "Crear cuenta",
+    "or": "ó",
+    "sign_in": "Iniciar sesión",
+    "sign_up_button": "Registrate",
+    "legal_disclamer": "Al registrarte estás aceptando nuestras {terms} y {privacy_policy}",
+    "terms": "Condiciones de uso",
+    "privacy_policy": "Política de privacidad"
+  },
+  "verify_account": {
+    "sending_email": "Enviando un e-mail con tu código",
+    "please_enter_code": "Por favor ingresa el código que te enviamos por e-mail",
+    "your_verification_code": "Tu código de verificación",
+    "verify": "Verificar",
+    "resend_email": "¿No recibiste el código? Reenviar e-mail",
+    "verifying_code": "Verificando el código",
+    "verified": "Verificado"
+  },
+  "consent": {
+    "authorize_app": "Autorizar App",
+    "hello_user": "¡Hola {user}!",
+    "app_requests_access": "{app_client_name} solicita acceso a tu cuenta:",
+    "legal_disclamer": "Al hacer click en Aceptar permites a esta app utilizar tu información conforme a sus respectivas {terms} y {privacy_policies}.",
+    "terms": "Condiciones de uso",
+    "privacy_policies": "Políticas de privacidad",
+    "scope": {
+      "openid": "Tu perfil: nombre de usuario, email, foto de perfil.",
+      "offline": "Acceso offline"
+    }
+  },
+  "forgot_password": {
+    "forgot_your_password": "¿Olvidaste tu constraseña?",
+    "check_your_email": "Revisa tu correo",
+    "change_your_password": "Cambia tu contraseña",
+    "instructions": "Ingresa tu dirección de e-mail y te enviaremos un código para que puedas crear una nueva contraseña",
+    "send_code": "Enviar código",
+    "sending_email": "Enviando un e-mail con tu código",
+    "please_enter_code": "Por favor ingresa el código que te enviamos por e-mail",
+    "your_verification_code": "Tu código de verificación",
+    "verify_code": "Verificar código",
+    "resend_email": "¿No recibiste el código? Reenviar e-mail",
+    "verifying_code": "Verificando el código",
+    "verified": "Verificado",
+    "change_password": "Cambiar contraseña",
+    "reseted": "Contraseña actualizada"
+  }
+}

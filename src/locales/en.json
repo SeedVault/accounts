@@ -1,0 +1,101 @@
+{
+  "validation": {
+    "email": "This value is not a valid email address.",
+    "csrf_token": "Invalid CSRF token.",
+    "option": "The value you selected is not a valid choice.",
+    "regex": "This value is not valid.",
+    "required": "This value should not be blank."
+  },
+  "domain": {
+    "user": {
+      "email_address": "E-mail address",
+      "your_email_address": "Your e-mail address",
+      "password": "Password",
+      "your_password": "Your password",
+      "new_password": "New password",
+      "your_new_password": "Your new password",
+      "re_enter_new_password": "Re-enter new password",
+      "your_new_password_again": "Your new password (again)",
+      "first_name": "First name",
+      "your_first_name": "Your first name",
+      "last_name": "Last name",
+      "your_last_name": "Your last name",
+      "username": "Username",
+      "your_username": "Your username",
+      "country": "Country",
+      "your_country": "Your country",
+      "validation": {
+        "unique_email": "E-mail already exist.",
+        "unique_username": "Username already exist.",
+        "user_not_found": "User not found.",
+        "email_not_found": "E-mail not found.",
+        "account_disabled": "Account has been disabled.",
+        "account_unverified": "The account has not yet been verified",
+        "invalid_credentials": "Invalid credentials",
+        "code_not_valid": "Code not valid",
+        "passwords_dont_match": "Passwords don't match"
+      }
+    }
+  },
+  "common": {
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "accept": "Accept",
+    "reject": "Reject",
+    "save": "Save"
+  },
+  "sign_in": {
+    "or": "or",
+    "sign_in": "Sign In",
+    "sign_up": "sign up",
+    "sign_in_button": "Sign in",
+    "forgot_password": "Forgot password?",
+    "keep_me_logged_in": "Keep me logged in"
+  },
+  "sign_up": {
+    "sign_up": "Sign Up",
+    "or": "or",
+    "sign_in": "sign in",
+    "sign_up_button": "Sign up",
+    "legal_disclamer": "By signing up you're accepting our {terms} and {privacy_policy}",
+    "terms": "Terms",
+    "privacy_policy": "Privacy policy"
+  },
+  "verify_account": {
+    "sending_email": "Sending an e-mail with your code",
+    "please_enter_code": "Please enter the code we emailed you",
+    "your_verification_code": "Your verification code",
+    "verify": "Verify",
+    "resend_email": "Didn't receive an e-mail? Resend e-mail",
+    "verifying_code": "Verifying code",
+    "verified": "Verified"
+  },
+  "consent": {
+    "authorize_app": "Authorize App",
+    "hello_user": "Hello {user}!",
+    "app_requests_access": "{app_client_name} is requesting access to your account:",
+    "legal_disclamer": "By clicking Accept, you allow this app to use your information in accordance with their respective {terms} and {privacy_policies}.",
+    "terms": "Terms",
+    "privacy_policies": "Privacy policies",
+    "scope": {
+      "openid": "Your profile: username, email, profile picture.",
+      "offline": "Offline access"
+    }
+  },
+  "forgot_password": {
+    "forgot_your_password": "Forgot your password?",
+    "check_your_email": "Check your e-mail",
+    "change_your_password": "Change your password",
+    "instructions": "Enter your e-mail address and we will send you a code to reset your password",
+    "send_code": "Send code",
+    "sending_email": "Sending an e-mail with your recovery code",
+    "please_enter_code": "Please enter the code we emailed you",
+    "your_verification_code": "Your recovery code",
+    "verify_code": "Verify code",
+    "resend_email": "Didn't receive an e-mail? Resend e-mail",
+    "verifying_code": "Verifying code",
+    "verified": "Verified",
+    "change_password": "Change password",
+    "reseted": "Password updated"
+  }
+}

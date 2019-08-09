@@ -1,48 +1,62 @@
 <template>
-  <div class="container-fluid">
-    <div class="form-row">
-      <div class="col-sm-4"></div>
-      <div class="col-sm-4">
-        <div class="text-center">
-          <img class="logo" :src="app_logo_uri !== '' ?  app_logo_uri: '@/assets/images/accounts-logo.png'" />
-          <h2>Authorize App</h2>
-          <p>
-            Hello {{ user }}!
-            <br />
-            {{ app_client_name }} is requesting access to your account:
-          </p>
-        </div>
+  <div class="text-left">
+    <div class="text-center">
+      <!-- <img class="logo"
+      :src="app_logo_uri !== '' ?  app_logo_uri: '@/assets/images/accounts-logo.png'" />  -->
+      <h2>{{ $t('consent.authorize_app') }}</h2>
+      <p>
+        <i18n path="consent.hello_user">
+          <span place="user">{{ user }}</span>
+        </i18n>
+        <br />
+      </p>
 
-        <ul class="scopeBox">
-          <li v-for="scope in app_scope">
-            {{ scope }}
-          </li>
-        </ul>
-
-        <p class="tos">
-          By clicking Allow access, you allow this app to use your information in
-          accordance with their respective <a target="_blank" :href="app_tos_uri"> Terms of Service</a>
-          and <a target="_blank" :href="app_policy_uri">Privacy policies</a>.
-          </p>
-        <form @submit.prevent="submit">
-          <input id="grant_scope" name="grant_scope" type="hidden" :value="requested_scope" />
-          <div class="row">
-            <div class="col-6">
-              <input type="button" @click="consent(false)" id="reject" name="reject" value="Reject" class="btn btn-secondary btn-lg btn-block" />
-            </div>
-            <div class="col-6">
-              <input type="button" @click="consent(true)" id="allow" name="allow" value="Accept" class="btn btn-primary btn-lg btn-block" />
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="col-sm-4"></div>
     </div>
+    <div class="scopeBox">
+      <div class="text-center">
+        <img class="logo"
+      :src="app_logo_uri !== '' ?  app_logo_uri: '@/assets/images/accounts-logo.png'" />
+      </div>
+      <p class="prompt">
+        <br />
+        <i18n path="consent.app_requests_access">
+          <span place="app_client_name">{{ app_client_name }}</span>
+        </i18n>
+      </p>
+      <ul>
+        <li v-for="scope in app_scope" :key="scope">
+          {{ $t(scope) }}
+        </li>
+      </ul>
+    </div>
+
+    <p class="tos">
+      <i18n path="consent.legal_disclamer">
+        <a place="terms" target="_blank" :href="app_tos_uri">{{ $t('consent.terms') }}</a>
+        <a place="privacy_policies" target="_blank" :href="app_policy_uri">{{ $t('consent.privacy_policies') }}</a>
+      </i18n>
+    </p>
+
+    <form @submit.prevent="submit">
+      <input id="grant_scope" name="grant_scope" type="hidden"
+      :value="requested_scope" />
+      <div class="row">
+        <div class="col-6">
+          <input type="button" @click="consent(false)" id="reject"
+          name="reject" :value="$t('common.reject')"
+          class="btn btn-secondary btn-lg btn-block" />
+        </div>
+        <div class="col-6">
+          <input type="button" @click="consent(true)" id="allow"
+          name="allow" :value="$t('common.accept')"
+          class="btn btn-primary btn-lg btn-block" />
+        </div>
+      </div>
+    </form>
   </div>
 </template>
 
 <script>
-
 export default {
   data() {
     return {
@@ -52,22 +66,25 @@ export default {
       app_scope: [],
       app_tos_uri: '',
       requested_scope: '',
-      user: ''
-    }
+      user: '',
+    };
   },
-  mounted: function () {
+  mounted() {
     const q = JSON.parse(this.$route.query.data);
     this.app_client_name = q.app_client_name;
     this.app_logo_uri = q.app_logo_uri;
     this.app_policy_uri = q.app_policy_uri;
     this.app_scope = q.app_scope;
-    for (var i=0; i < this.app_scope.length; i++) {
-      switch(this.app_scope[i]) {
+    for (let i = 0; i < this.app_scope.length; i += 1) {
+      switch (this.app_scope[i]) {
         case 'openid':
-          this.app_scope[i] = 'Your profile: username, email, profile picture.';
+          this.app_scope[i] = 'consent.scope.openid';
           break;
         case 'offline':
-          this.app_scope[i] = 'Offline access.';
+          this.app_scope[i] = 'consent.scope.offline';
+          break;
+        default:
+          // use default value
           break;
       }
     }
@@ -77,18 +94,18 @@ export default {
   },
   methods: {
     consent(allowValue) {
-      var that = this;
-      this.axios.post('/server/consent', {
+      // const that = this;
+      this.axios.post(`/${this.$i18n.locale}/auth/consent`, {
         allow: allowValue,
-        grant_scope: this.requested_scope.split(',')
+        grant_scope: this.requested_scope.split(','),
       })
-      .then(function (response) {
-        window.location.href = response.data.redirect;
-      })
-      .catch(function (error) {
-        alert(error.response.status);
-      });
-    }
+        .then((response) => {
+          window.location.href = response.data.redirect;
+        })
+        .catch((error) => {
+          alert(error.response.status);
+        });
+    },
   },
 };
 </script>
@@ -96,8 +113,7 @@ export default {
 <style lang="scss" scoped>
 .logo {
   text-align: center;
-  margin-top: 37px;
-  margin-bottom: 60px;
+  margin-bottom: 10px;
 }
 
 h2 {
@@ -114,10 +130,19 @@ p.tos {
   margin: 30px;
 }
 
+p.prompt {
+  color: #777;
+}
+
 .scopeBox {
   border: 1px solid #ccc;
-  padding: 20px 40px;
+  // padding: 20px 40px;
+  padding: 30px;
   border-radius: 5px;
   margin-top: 30px;
+
+  ul {
+    list-style-type: square;
+  }
 }
 </style>

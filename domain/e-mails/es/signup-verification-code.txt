@@ -1,0 +1,17 @@
+<% include ./_header.txt %>
+
+Casi terminamos
+
+Este es el código de confirmación para verificar tu cuenta:
+
+                    <%= code %>
+
+Todo lo que tienes que hacer es copiarlo y pegarlo en el formulario para 
+finalizar el proceso de registración.
+
+¡Gracias!
+
+
+El equipo SEED
+
+<% include ./_footer.txt %>

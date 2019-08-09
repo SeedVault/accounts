@@ -1,51 +1,63 @@
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var helmet = require('helmet');
-var loginRouter = require('./routes/login');
-var consentRouter = require('./routes/consent');
-var logoutRouter = require('./routes/logout');
-var Knex = require('knex');
-var knexConfig = require('../knexfile');
-var { Model } = require('objection');
+let bodyParser = require('body-parser');
+let cookieParser = require('cookie-parser');
+let helmet = require('helmet');
+var db = require('../domain/services/database');
+let csrf = require('csurf');
+let auth = require('./controllers/auth');
+// let users = require('./controllers/users');
 
+// Available locales
+const availableLocales = ['en', 'es'];
+const locale = ':locale(' + availableLocales.join('|') + ')';
 module.exports = function(app) {
 
-  // Initialize knex and bind all models to a knex instance
-  var knex = Knex(knexConfig.development);
-  Model.knex(knex);
+  // Connect to database
+  db();
 
   // Middleware
-  app.use(bodyParser.json());
   app.use(helmet());
+  app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
-  // app.use(express.static(path.join(__dirname, 'public')));
+
+  // Set up protection against CSRF
+  var csrfCheck = csrf({ cookie: true, secure: true });
+  app.use(csrfCheck);
+  app.use(function (err, req, res, next) {
+    if (err.code !== 'EBADCSRFTOKEN') return next(err);
+    // var validationError = createValidationError('Invalid CSRF token');
+    // return res.status(422).json(validationError);
+    return res.status(422).json({"errors":{"_":{"message":"validation.csrf_token"}}});
+  });
+
+  // Detect language
+  app.use((req, res, next) => {
+    let lang = req.cookies.lang;
+    if (!lang) {
+      let acceptsLanguages = req.acceptsLanguages();
+      for (let i = 0; i < acceptsLanguages.length; i++) {
+        let langParts = acceptsLanguages[i].split('-');
+        if (availableLocales.includes(langParts[0])) {
+          lang = langParts[0];
+          break;
+        }
+      }
+    }
+    if (!lang) lang = availableLocales[0];
+    req.lang = lang;
+    // res.cookie('lang', String(lang), {secure: true});
+    next();
+  });
+
 
   // Routes
-  app.get('/server', function (req, res) {
-    res.send('Hello World!');
-  });
+  app.get('/auth/login', auth.showSignInForm);
+  app.post(`/${locale}/auth/sign-in`, auth.submitSignInForm);
+  app.post(`/${locale}/auth/sign-up`, auth.submitSignUpForm);
+  app.post(`/${locale}/auth/forgot-password`, auth.submitForgotPasswordForm);
+  app.post(`/${locale}/auth/send-verification-email`, auth.sendVerificationEmail);
+  app.post(`/${locale}/auth/verify-email-code`, auth.verifyEmailCode);
+  app.get('/auth/consent', auth.showConsentForm);
+  app.post(`/${locale}/auth/consent`, auth.submitConsentForm);
 
-  app.use('/server/login', loginRouter);
-  app.use('/server/consent', consentRouter);
-  app.use('/server/logout', logoutRouter);
-
-
-  /*
-  // Error handling
-  app.use((req, res, next) => {
-    next(createError(404));
-  });
-
-  // Error handler
-  app.use((err, req, res, next) => {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error', { title: 'Oops!' });
-  });
-*/
 }
