@@ -165,8 +165,12 @@ const auth = {
   showConsentForm: async (req, res, next) => {
     var query = url.parse(req.url, true).query;
     var challenge = query.consent_challenge;
+    //
+    // console.log(user);
     hydra.getConsentRequest(challenge)
       .then(function (response) {
+        // const user = UserService.findUserByEmail(response.subject);
+        // console.log(user);
         if (response.skip) {
           return hydra.acceptConsentRequest(challenge, {
             grant_scope: response.requested_scope,
@@ -179,6 +183,11 @@ const auth = {
 
               // This data will be available in the ID token.
               // id_token: { baz: 'bar' },
+              /* id_token: {
+                "first_name": user.firstname,
+                "last_name": user.lastname,
+                "picture": user.picture
+              }, */
             }
           }).then(function (response) {
             // Redirect the user back to hydra

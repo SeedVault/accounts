@@ -74,7 +74,7 @@ const UserSchema = mongoose.Schema({
     trim: true,
     index: true,
   },
-  imageUrl: {
+  picture: {
     type: String,
     trim: true,
     default: '',
