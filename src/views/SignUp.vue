@@ -82,7 +82,6 @@ export default {
           this.$router.push({ name: 'verify-account', query: { email: this.email } });
         })
         .catch((error) => {
-          console.log(error);
           if (error.response.status === 422) {
             that.validationErrors = this.normalizeErrors(error.response);
           } else {
