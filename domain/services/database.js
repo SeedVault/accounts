@@ -10,7 +10,7 @@ let mongoose = require('mongoose');
 
 module.exports = async () => {
 
-  await mongoose.connect(mongoUri, { dbName: database, useNewUrlParser: true, useCreateIndex: true })
+  await mongoose.connect(mongoUri, { dbName: database, useNewUrlParser: true, useCreateIndex: true, auth: {authdb:"admin"} })
 
   mongoose.connection.on('connected', () => {
     if (process.env.NODE_ENV === 'debug') {
