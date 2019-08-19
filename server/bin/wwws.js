@@ -3,7 +3,11 @@
 const { resolve } = require('path');
 const express = require('express');
 const configureAPI = require('../app');
+const https = require('https');
+const fs = require('fs');
+
 const app = express();
+
 const PORT = process.env.ACCOUNTS_PORT;
 
 // API
@@ -21,4 +25,9 @@ app.get('*', (req, res) => {
 });
 
 // Go
-app.listen(PORT, () => console.log(`App running on port ${PORT}!`));
+https.createServer({
+  key: fs.readFileSync(`${__dirname}/../../../dev-environment/certs/key.pem`),
+  cert: fs.readFileSync(`${__dirname}/../../../dev-environment/certs/cert.pem`)
+}, app).listen(PORT, () => {
+  console.log(`App running on port ${PORT}!`);
+});

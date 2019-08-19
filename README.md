@@ -34,5 +34,7 @@ npm run test
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Add to pm2
+```
+pm2 start ecosystem.config.js --env development
+```

@@ -42,10 +42,9 @@ module.exports = function(app) {
           break;
         }
       }
+      if (!lang) lang = availableLocales[0];
     }
-    if (!lang) lang = availableLocales[0];
     req.lang = lang;
-    // res.cookie('lang', String(lang), {secure: true});
     next();
   });
 

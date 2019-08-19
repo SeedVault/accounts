@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-const nodemailerSendgrid = require('nodemailer-sendgrid');
 const ejs = require('ejs');
 const path = require('path');
 const fs = require('fs');
@@ -21,11 +20,14 @@ switch (process.env.NODE_ENV) {
     break;
   case 'production':
     // Sendgrid
-    transport = nodemailer.createTransport(
-      nodemailerSendgrid({
-        apiKey: process.env.SENDGRID_API_KEY
-      })
-    );
+    transport = nodemailer.createTransport({
+      host: 'smtp.sendgrid.net',
+      port: 465,
+      auth: {
+        user: 'apikey',
+        pass: process.env.SENDGRID_API_KEY
+      }
+    });
     break;
   default:
     // MailHog at localhost
