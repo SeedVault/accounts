@@ -33,7 +33,8 @@
     <p class="tos">
       <i18n path="consent.legal_disclamer">
         <a place="terms" target="_blank" :href="app_tos_uri">{{ $t('consent.terms') }}</a>
-        <a place="privacy_policies" target="_blank" :href="app_policy_uri">{{ $t('consent.privacy_policies') }}</a>
+        <a place="privacy_policies" target="_blank"
+        :href="app_policy_uri">{{ $t('consent.privacy_policies') }}</a>
       </i18n>
     </p>
 

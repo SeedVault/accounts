@@ -92,23 +92,23 @@ export default {
   },
   computed: {
     ...mapGetters(['allCountries', 'allRoles']),
-    roles: function () {
-      let roleList = [];
+    roles() {
+      const roleList = [];
       for (let i = 0; i < this.allRoles.length; i++) {
         roleList.push({
           value: this.allRoles[i],
           text: this.$i18n.t(`domain.roles.${this.allRoles[i]}`),
-         });
+        });
       }
       return roleList;
     },
-    countries: function () {
-      let countryList = [];
+    countries() {
+      const countryList = [];
       for (let i = 0; i < this.allCountries.length; i++) {
         countryList.push({
           value: this.allCountries[i],
           text: this.$i18n.t(`domain.countries.${this.allCountries[i]}`),
-         });
+        });
       }
       return countryList;
     },

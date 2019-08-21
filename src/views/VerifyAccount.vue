@@ -29,7 +29,6 @@
       </div>
 
 
-
       <div id="code-form" v-if="sent && !loading && !verified">
 
         <validation-box id="_" :validationErrors="validationErrors"></validation-box>
@@ -90,8 +89,8 @@ export default {
           this.loading = false;
           if (error.response.status === 422) {
             this.validationErrors = this.normalizeErrors(error.response);
-            this.userNotFound = (this.validationErrors['_'][0].msg ===
-            'domain.user.validation.user_not_found');
+            this.userNotFound = (this.validationErrors._[0].msg
+            === 'domain.user.validation.user_not_found');
           } else {
             alert(`Something went wrong: ${error.response.status}`);
           }

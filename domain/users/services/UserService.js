@@ -3,6 +3,7 @@ const LoginCredentials = require('../validators/LoginCredentials');
 const PasswordResetCode = require('../validators/PasswordResetCode');
 const mailer = require('../../services/mailer');
 const ValidationError = require('mongoose/lib/error/validation');
+const { SeedTokenAPIClientEthereumETHPersonal } = require('seedtoken-api-client');
 
 class UserNotFoundError extends ValidationError {
   constructor(message) {
@@ -138,6 +139,8 @@ const UserService = {
       throw new DisabledAccountError();
     }
     if (user.accountStatus === AccountStatus.UNVERIFIED) {
+      const st = new SeedTokenAPIClientEthereumETHPersonal(process.env.PARITY_URL);
+      user.wallet = await st.createAccount(process.env.PARITY_TEST_ADDRESS_PASSPHRASE || '');
       user.accountStatus = AccountStatus.VERIFIED;
       user.verificationCode = '';  // Reset verification code
       await user.save();

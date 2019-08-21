@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
     name: 'accounts',
-    script: './server/bin/wwws.js',
+    script: './server/bin/www.js',
 
     // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
     node_args: '-r dotenv/config',

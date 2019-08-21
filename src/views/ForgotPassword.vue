@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import BoxedLayoutVue from "../layouts/BoxedLayout.vue";
+import BoxedLayoutVue from '../layouts/BoxedLayout.vue';
 
 export default {
   data() {
@@ -90,7 +90,7 @@ export default {
       repeatNewPassword: '',
       verificationCode: '',
       validationErrors: [],
-    }
+    };
   },
   methods: {
     sendMail() {
@@ -118,8 +118,8 @@ export default {
           this.loading = false;
           if (error.response.status === 422) {
             this.validationErrors = this.normalizeErrors(error.response);
-            this.userNotFound = (this.validationErrors['_'][0].msg ===
-            'domain.user.validation.user_not_found');
+            this.userNotFound = (this.validationErrors._[0].msg
+            === 'domain.user.validation.user_not_found');
           } else {
             alert(`Something went wrong: ${error.response.status}`);
           }
@@ -159,7 +159,7 @@ export default {
         email: this.email,
         verificationCode: this.verificationCode,
         newPassword: this.newPassword,
-        repeatNewPassword: this.repeatNewPassword
+        repeatNewPassword: this.repeatNewPassword,
       })
         .then((response) => {
           const that = this;
@@ -178,7 +178,7 @@ export default {
             alert(`Something went wrong: ${error.response.status}`);
           }
         });
-    }
+    },
   },
 };
 
