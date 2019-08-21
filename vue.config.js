@@ -4,7 +4,8 @@ module.exports = {
   devServer: {
     before: server,
     https: true,
-    port: 9000,
+    port: process.env.ACCOUNTS_PORT,
+    public: `127.0.0.1:${process.env.ACCOUNTS_PORT}`,
   },
 
   pluginOptions: {
