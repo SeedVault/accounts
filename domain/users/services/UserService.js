@@ -244,7 +244,13 @@ const UserService = {
         let nk = k.toLowerCase();
         if (user.normalizedUsername === nk || user.normalizedEmail === nk || user.normalizedWalletAddress === nk) {
           if (user.accountStatus !== AccountStatus.UNVERIFIED) {
-            results[k] = {username: user.username, email: user.email, walletAddress: user.walletAddress, picture: user.picture};
+            results[k] = {
+              username: user.username,
+              email: user.email,
+              walletAddress: user.walletAddress,
+              picture: user.picture,
+              createdAt: user.createdAt
+            };
           }
           break;
         }
