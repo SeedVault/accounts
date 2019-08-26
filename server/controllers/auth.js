@@ -148,8 +148,8 @@ const auth = {
         email: req.body.email,
         verificationCode: req.body.verificationCode
       });
-      let user = await VerificationCredentials.check(credentials);
-      await UserService.loginWithVerificationCode(credentials.email, credentials.verificationCode);
+      await VerificationCredentials.check(credentials);
+      let user = await UserService.loginWithVerificationCode(credentials.email, credentials.verificationCode);
       return await auth.loginIntoHydra(user._id, false, req, res, next);
     } catch (err) {
       if (err instanceof ValidationError) {
