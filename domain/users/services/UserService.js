@@ -189,6 +189,12 @@ const UserService = {
     if (user.accountStatus === AccountStatus.UNVERIFIED) {
       const st = new SeedTokenAPIClientEthereumETHPersonal(process.env.PARITY_URL);
       user.walletAddress = await st.createAccount(process.env.PARITY_TEST_ADDRESS_PASSPHRASE || '');
+      await st.transfer(
+        process.env.PARITY_TEST_ADDRESS,
+        user.walletAddress,
+        '1000',
+        process.env.PARITY_TEST_ADDRESS_PASSPHRASE
+      );
       user.accountStatus = AccountStatus.VERIFIED;
       user.verificationCode = '';  // Reset verification code
       await user.save();
