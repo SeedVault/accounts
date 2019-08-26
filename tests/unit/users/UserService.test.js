@@ -25,12 +25,16 @@ async function getVerificationCodeFromLastEmail() {
   return msg.html.match(/<\s*p class="code"[^>]*>(.*?)<\s*\/\s*p>/)[1];
 }
 
-async function createAndVerifyJohnDoe() {
-  const user = await createJohnDoe();
+async function createAndVerifyUser(email, username) {
+  const user = await createUser(email, username);
   await userService.sendVerificationCodeByEmail(user.email, 'en');
   const verificationCode = await getVerificationCodeFromLastEmail();
   await userService.loginWithVerificationCode(user.email, verificationCode);
   return userService.findUserByEmail(user.email);
+}
+
+async function createAndVerifyJohnDoe() {
+  return createAndVerifyUser('johndoe@email.com', 'johndoe');
 }
 
 describe('The Sign Up from', () => {
@@ -46,10 +50,11 @@ describe('The Sign Up from', () => {
     }
   });
 
+
   it('should throw a validation error when the username is already in use', async () => {
     try {
       const user = await createJohnDoe();
-      await createUser('new@email.com', user.username);
+      await createUser('new@email.com', user.username.toUpperCase());
     } catch (err) {
       expect(err.errors.username.message).toBe('domain.user.validation.unique_username');
     }
@@ -65,10 +70,11 @@ describe('The Sign Up from', () => {
   });
 });
 
+
 describe('The Sign In form', () => {
   it('should allow a verified user to log in with a valid e-mail and password', async () => {
     const user = await createAndVerifyJohnDoe();
-    await userService.loginWithPassword(user.email, 'secret');
+    await userService.loginWithPassword(user.email.toUpperCase(), 'secret');
     expect(true);
   });
 
@@ -106,5 +112,31 @@ describe('The Sign In form', () => {
     } catch (err) {
       expect(err).toBeInstanceOf(DisabledAccountError);
     }
+  });
+});
+
+describe('Profile API', () => {
+  it('should retrieve a map of verified profiles by username, email and walletAddress', async () => {
+    const john = await createAndVerifyUser('johndoe@email.com', 'johndoe');
+    const jane = await createAndVerifyUser('janedoe@email.com', 'janedoe');
+    const mike = await createAndVerifyUser('mikedoe@email.com', 'mikedoe');
+    const unverified = await createUser('unverified@email.com', 'unverified');
+    const results = await userService.searchProfiles(
+      [john.walletAddress, jane.email, mike.username, unverified.username],
+    );
+    expect(results[john.walletAddress].email).toBe(john.email);
+    expect(results[jane.email].email).toBe(jane.email);
+    expect(results[mike.username].email).toBe(mike.email);
+    expect(results[unverified.username]).toBe(undefined);
+  });
+
+  it('should retrieve an empty map when search keywords are empty', async () => {
+    const results = await userService.searchProfiles([]);
+    expect(results.length).toBe(0);
+  });
+
+  it('should retrieve an empty map when search results are empty', async () => {
+    const results = await userService.searchProfiles(['doNotExist']);
+    expect(results.length).toBe(0);
   });
 });

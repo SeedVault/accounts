@@ -6,7 +6,7 @@
       <h2>{{ $t('consent.authorize_app') }}</h2>
       <p>
         <i18n path="consent.hello_user">
-          <span place="user">{{ user }}</span>
+          <span slot="user">{{ username }}</span>
         </i18n>
         <br />
       </p>
@@ -20,7 +20,7 @@
       <p class="prompt">
         <br />
         <i18n path="consent.app_requests_access">
-          <span place="app_client_name">{{ app_client_name }}</span>
+          <span slot="app_client_name">{{ app_client_name }}</span>
         </i18n>
       </p>
       <ul>
@@ -32,8 +32,8 @@
 
     <p class="tos">
       <i18n path="consent.legal_disclamer">
-        <a place="terms" target="_blank" :href="app_tos_uri">{{ $t('consent.terms') }}</a>
-        <a place="privacy_policies" target="_blank"
+        <a slot="terms" target="_blank" :href="app_tos_uri">{{ $t('consent.terms') }}</a>
+        <a slot="privacy_policies" target="_blank"
         :href="app_policy_uri">{{ $t('consent.privacy_policies') }}</a>
       </i18n>
     </p>
@@ -68,6 +68,7 @@ export default {
       app_tos_uri: '',
       requested_scope: '',
       user: '',
+      username: '',
     };
   },
   mounted() {
@@ -92,6 +93,7 @@ export default {
     this.app_tos_uri = q.app_tos_uri;
     this.requested_scope = q.requested_scope;
     this.user = q.user;
+    this.username = q.username;
   },
   methods: {
     consent(allowValue) {

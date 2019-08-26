@@ -4,7 +4,15 @@ let helmet = require('helmet');
 var db = require('../domain/services/database');
 let csrf = require('csurf');
 let auth = require('./controllers/auth');
+let api = require('./controllers/api');
+let cors = require('cors');
 // let users = require('./controllers/users');
+
+// Allow self-signed certs in development
+if (process.env.NODE_ENV === 'development') {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+}
+
 
 // Available locales
 const availableLocales = ['en', 'es'];
@@ -13,6 +21,21 @@ module.exports = function(app) {
 
   // Connect to database
   db();
+
+  // Custom middleware to set origin
+  app.use(function(req,res,next) {
+    req.headers.origin = req.headers.origin || (req.secure? 'https://': 'http://') + req.headers.host;
+    next();
+  });
+
+  // CORS
+  var corsAuth = function (req, callback) {
+    if (req.header('Accounts-API-Key') === process.env.ACCOUNTS_API_KEY) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
 
   // Middleware
   app.use(helmet());
@@ -58,5 +81,6 @@ module.exports = function(app) {
   app.post(`/${locale}/auth/verify-email-code`, auth.verifyEmailCode);
   app.get('/auth/consent', auth.showConsentForm);
   app.post(`/${locale}/auth/consent`, auth.submitConsentForm);
+  app.get('/api/profiles/search', cors(corsAuth), api.searchProfiles);
 
 }

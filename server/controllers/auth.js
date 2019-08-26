@@ -42,9 +42,9 @@ const auth = {
         password: req.body.password
       });
       await LoginCredentials.check(credentials); */
-      await UserService.loginWithPassword(req.body.email, req.body.password);
+      let user = await UserService.loginWithPassword(req.body.email, req.body.password);
       let remember = Boolean(parseInt(req.body.remember));
-      return await auth.loginIntoHydra(req.body.email, remember, req, res, next);
+      return await auth.loginIntoHydra(user._id, remember, req, res, next);
     } catch (err) {
       if (err instanceof ValidationError) {
         res.status(422).json(err);
@@ -74,11 +74,11 @@ const auth = {
   },
 
 
-  loginIntoHydra: async (email, remember, req, res, next) => {
+  loginIntoHydra: async (username, remember, req, res, next) => {
     var challenge = req.cookies.challenge;
     await hydra.acceptLoginRequest(challenge, {
       // Subject is an alias for user ID and can be a random string, a UUID, an email address.
-      subject: email,
+      subject: username,
       // The skip parameter in the other route to automatically authenticate the user in future requests
       remember: remember,
       // Session TTL in seconds. Set this to 0 so it will never expire.
@@ -148,9 +148,9 @@ const auth = {
         email: req.body.email,
         verificationCode: req.body.verificationCode
       });
-      await VerificationCredentials.check(credentials);
+      let user = await VerificationCredentials.check(credentials);
       await UserService.loginWithVerificationCode(credentials.email, credentials.verificationCode);
-      return await auth.loginIntoHydra(credentials.email, false, req, res, next);
+      return await auth.loginIntoHydra(user._id, false, req, res, next);
     } catch (err) {
       if (err instanceof ValidationError) {
         res.status(422).json(err);
@@ -165,10 +165,11 @@ const auth = {
   showConsentForm: async (req, res, next) => {
     var query = url.parse(req.url, true).query;
     var challenge = query.consent_challenge;
+    let user = {};
     try {
       let response = await hydra.getConsentRequest(challenge);
+      user = await UserService.findUserById(response.subject);
       if (response.skip) {
-        const user = await UserService.findUserByEmail(response.subject);
         let result = await hydra.acceptConsentRequest(challenge, {
           grant_scope: response.requested_scope,
           grant_access_token_audience: response.requested_access_token_audience,
@@ -184,7 +185,8 @@ const auth = {
               "first_name": user.firstname,
               "last_name": user.lastname,
               "username": user.username,
-              "picture": user.picture
+              "picture": user.picture,
+              "email": user.email
             },
           }
         });
@@ -197,9 +199,11 @@ const auth = {
       // you have available.
       res.cookie('XSRF-TOKEN', req.csrfToken(), {secure: true});
       res.cookie('challenge', String(challenge), {secure: true});
+      console.log(user);
       var data = {
         requested_scope: String(response.requested_scope),
         user: String(response.subject),
+        username: String(user.username),
         app_logo_uri: String(response.client.logo_uri),
         app_client_name: String(response.client.client_name),
         app_scope: response.requested_scope,
@@ -239,7 +243,7 @@ const auth = {
 
     try {
       let response = await hydra.getConsentRequest(challenge);
-      const user = await UserService.findUserByEmail(response.subject);
+      const user = await UserService.findUserById(response.subject);
       let result = await hydra.acceptConsentRequest(challenge, {
         // We can grant all scopes that have been requested - hydra already
         // checked for us that no additional scopes are requested accidentally.
@@ -257,7 +261,8 @@ const auth = {
             "first_name": user.firstname,
             "last_name": user.lastname,
             "username": user.username,
-            "picture": user.picture
+            "picture": user.picture,
+            "email": user.email
           },
         },
         // Hydra checks if requested audiences are allowed by the client,

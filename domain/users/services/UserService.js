@@ -58,21 +58,68 @@ const UserService = {
 
   saveRegistrationForm: async (username, email, firstname, lastname, countryCode,
     role, plaintextPassword) => {
-      // Save unverified user
+      let normalizedUsername = '';
+      let normalizedEmail = '';
+      let normalizedWalletAddress = '';
+      if (username) {
+        normalizedUsername = username.toLowerCase();
+      }
+      if (email) {
+        normalizedEmail = email.toLowerCase();
+        normalizedWalletAddress = normalizedEmail;
+      }
       let user = new User({
         username,
+        normalizedUsername,
         email,
         firstname,
         lastname,
         countryCode,
         role,
-        password: plaintextPassword
+        password: plaintextPassword,
+        walletAddress: email,  // unique arbitrary value
       });
-      return await user.save();
+      try {
+        return await user.save();
+      } catch (err) {
+        if (err instanceof ValidationError) {
+          if (err.errors.normalizedUsername) {
+            err.errors.username = err.errors.normalizedUsername;
+            err.errors.username.message = 'domain.user.validation.unique_username';
+            err.errors.username.path = 'username';
+            delete(err.errors.normalizedUsername);
+          }
+        }
+        if (err instanceof ValidationError) {
+          if (err.errors.normalizedEmail) {
+            err.errors.email = err.errors.normalizedEmail;
+            err.errors.email.message = 'domain.user.validation.unique_email';
+            err.errors.email.path = 'email';
+            delete(err.errors.normalizedEmail);
+          }
+        }
+        if (err instanceof ValidationError) {
+          if (err.errors.normalizedWalletAddress) {
+            err.errors.walletAddress = err.errors.normalizedWalletAddress;
+            err.errors.walletAddress.message = 'domain.user.validation.unique_walletAddress';
+            err.errors.walletAddress.path = 'walletAddress';
+            delete(err.errors.normalizedWalletAddress);
+          }
+        }
+        throw err;
+      }
+  },
+
+  findUserById: async (id) => {
+    let user = await User.findById(id).exec();
+    if (!user) {
+      throw new UserNotFoundError();
+    }
+    return user;
   },
 
   findUserByEmail: async (email) => {
-    let user = await User.findOne({ email }).exec();
+    let user = await User.findOne({ normalizedEmail: email.toLowerCase() }).exec();
     if (!user) {
       throw new UserNotFoundError();
     }
@@ -127,6 +174,7 @@ const UserService = {
     if (user.accountStatus === AccountStatus.UNVERIFIED) {
       throw new UnverifiedAccountError();
     }
+    return user;
   },
 
   loginWithVerificationCode: async (email, plaintextVerificationCode) => {
@@ -140,11 +188,12 @@ const UserService = {
     }
     if (user.accountStatus === AccountStatus.UNVERIFIED) {
       const st = new SeedTokenAPIClientEthereumETHPersonal(process.env.PARITY_URL);
-      user.wallet = await st.createAccount(process.env.PARITY_TEST_ADDRESS_PASSPHRASE || '');
+      user.walletAddress = await st.createAccount(process.env.PARITY_TEST_ADDRESS_PASSPHRASE || '');
       user.accountStatus = AccountStatus.VERIFIED;
       user.verificationCode = '';  // Reset verification code
       await user.save();
     }
+    return user;
   },
 
   resetPasswordWithVerificationCode: async (email, plaintextVerificationCode,
@@ -172,6 +221,37 @@ const UserService = {
     await user.save();
   },
 
+  searchProfiles: async (searchKeywords) => {
+    if (searchKeywords.length === 0) {
+      return new Array();
+    }
+    let keywords = new Array();
+    for (let i = 0; i < searchKeywords.length; i++) {
+      if (!keywords.includes(searchKeywords[i].toLowerCase())) {
+        keywords.push(searchKeywords[i].toLowerCase());
+      }
+    }
+    let users = await User.find({$or:[
+      {'normalizedUsername': { $in: keywords }},
+      {'normalizedEmail': { $in: keywords }},
+      {'normalizedWalletAddress': { $in: keywords }}
+    ]}).exec();
+    let results = new Array();
+    for (let i = 0; i < users.length; i++) {
+      for (let j = 0; j < searchKeywords.length; j++) {
+        let user = users[i];
+        let k = String(searchKeywords[j]);
+        let nk = k.toLowerCase();
+        if (user.normalizedUsername === nk || user.normalizedEmail === nk || user.normalizedWalletAddress === nk) {
+          if (user.accountStatus !== AccountStatus.UNVERIFIED) {
+            results[k] = {username: user.username, email: user.email, walletAddress: user.walletAddress, picture: user.picture};
+          }
+          break;
+        }
+      }
+    }
+    return results;
+  },
 };
 
 module.exports = {

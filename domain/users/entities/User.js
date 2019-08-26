@@ -18,10 +18,26 @@ const UserSchema = mongoose.Schema({
     unique: true,
     trim: true
   },
-  email: {
+  normalizedUsername: {
     type: String,
     lowercase: true,
     required: [true, 'validation.required'],
+    match: [/^[a-z0-9]+$/, 'validation.regex'],
+    index: true,
+    unique: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: [true, 'validation.required'],
+    match: [/\S+@\S+\.\S+/, 'validation.email'],
+    unique: true,
+    index: true,
+    trim: true
+  },
+  normalizedEmail: {
+    type: String,
+    lowercase: true,
     match: [/\S+@\S+\.\S+/, 'validation.email'],
     unique: true,
     index: true,
@@ -39,6 +55,7 @@ const UserSchema = mongoose.Schema({
   },
   countryCode: {
     type: String,
+    lowercase: true,
     required: [true, 'validation.required'],
     enum: {
       values: [
@@ -79,11 +96,21 @@ const UserSchema = mongoose.Schema({
     trim: true,
     default: '',
   },
-  wallet: {
+  walletAddress: {
     type: String,
     required: [true, 'validation.required'],
     trim: true,
-    default: '12345',
+    default: '',
+    unique: true,
+    index: true,
+  },
+  normalizedWalletAddress: {
+    type: String,
+    lowercase: true,
+    trim: true,
+    default: '',
+    unique: true,
+    index: true,
   },
   password: {
     type: String,
@@ -106,7 +133,39 @@ const UserSchema = mongoose.Schema({
 
 UserSchema.plugin(uniqueValidator, { message: 'domain.user.validation.unique_{PATH}' });
 
+
 UserSchema.pre('save', function(next) {
+  if (this.isModified('password')) {
+    this.password = Bcrypt.hashSync(this.password, 10);
+  }
+  if (this.isModified('verificationCode')) {
+    this.verificationCode = Bcrypt.hashSync(this.verificationCode, 10);
+  }
+  if (this.isModified('username')) {
+    this.normalizedUsername = this.username.toLowerCase();
+  }
+  if (this.isModified('email')) {
+    this.normalizedEmail = this.email.toLowerCase();
+  }
+  if (this.isModified('walletAddress')) {
+    this.normalizedWalletAddress = this.walletAddress.toLowerCase();
+  }
+  next();
+});
+
+/* UserSchema.pre('save', function(next) {
+  if (!this.isModified('email')) {
+    return next();
+  }
+  console.log(this.email);
+  console.log(typeof this.email);
+  this.normalizedEmail = this.email.toLowerCase();
+  this.normalizedEmail = this.email.toLowerCase();
+  next();
+});
+*/
+
+/* UserSchema.pre('save', function(next) {
   if (!this.isModified('password')) {
     return next();
   }
@@ -114,17 +173,18 @@ UserSchema.pre('save', function(next) {
   next();
 });
 
-UserSchema.methods.comparePassword = async function(plaintextPassword) {
-  return await Bcrypt.compareSync(plaintextPassword, this.password);
-};
-
 UserSchema.pre('save', function(next) {
   if (!this.isModified('verificationCode')) {
     return next();
   }
   this.verificationCode = Bcrypt.hashSync(this.verificationCode, 10);
   next();
-});
+}); */
+
+
+UserSchema.methods.comparePassword = async function(plaintextPassword) {
+  return await Bcrypt.compareSync(plaintextPassword, this.password);
+};
 
 UserSchema.methods.compareVerificationCode = async function(plaintextVerificationCode) {
   return await Bcrypt.compareSync(plaintextVerificationCode, this.verificationCode);
