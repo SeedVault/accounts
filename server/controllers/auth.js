@@ -185,7 +185,7 @@ const auth = {
               "first_name": user.firstname,
               "last_name": user.lastname,
               "username": user.username,
-              "picture": user.picture,
+              "picture": user.pictureUrl,
               "email": user.email
             },
           }
@@ -261,7 +261,7 @@ const auth = {
             "first_name": user.firstname,
             "last_name": user.lastname,
             "username": user.username,
-            "picture": user.picture,
+            "picture": user.pictureUrl,
             "email": user.email
           },
         },

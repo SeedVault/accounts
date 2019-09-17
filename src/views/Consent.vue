@@ -1,64 +1,71 @@
 <template>
-  <div class="text-left">
-    <div class="text-center">
-      <!-- <img class="logo"
-      :src="app_logo_uri !== '' ?  app_logo_uri: '@/assets/images/accounts-logo.png'" />  -->
-      <h2>{{ $t('consent.authorize_app') }}</h2>
-      <p>
-        <i18n path="consent.hello_user">
-          <span slot="user">{{ username }}</span>
-        </i18n>
-        <br />
-      </p>
-
-    </div>
-    <div class="scopeBox">
+  <boxed-layout>
+    <div class="text-left">
       <div class="text-center">
-        <img class="logo"
-      :src="app_logo_uri !== '' ?  app_logo_uri: '@/assets/images/accounts-logo.png'" />
+        <!-- <img class="logo"
+        :src="app_logo_uri !== '' ?  app_logo_uri: '@/assets/images/accounts-logo.png'" />  -->
+        <h2>{{ $t('consent.authorize_app') }}</h2>
+        <p>
+          <i18n path="consent.hello_user">
+            <span slot="user">{{ username }}</span>
+          </i18n>
+          <br />
+        </p>
+
       </div>
-      <p class="prompt">
-        <br />
-        <i18n path="consent.app_requests_access">
-          <span slot="app_client_name">{{ app_client_name }}</span>
+      <div class="scopeBox">
+        <div class="text-center">
+          <img class="logo"
+        :src="app_logo_uri !== '' ?  app_logo_uri: '@/assets/images/accounts-logo.png'" />
+        </div>
+        <p class="prompt">
+          <br />
+          <i18n path="consent.app_requests_access">
+            <span slot="app_client_name">{{ app_client_name }}</span>
+          </i18n>
+        </p>
+        <ul>
+          <li v-for="scope in app_scope" :key="scope">
+            {{ $t(scope) }}
+          </li>
+        </ul>
+      </div>
+
+      <p class="tos">
+        <i18n path="consent.legal_disclamer">
+          <a slot="terms" target="_blank" :href="app_tos_uri">{{ $t('consent.terms') }}</a>
+          <a slot="privacy_policies" target="_blank"
+          :href="app_policy_uri">{{ $t('consent.privacy_policies') }}</a>
         </i18n>
       </p>
-      <ul>
-        <li v-for="scope in app_scope" :key="scope">
-          {{ $t(scope) }}
-        </li>
-      </ul>
+
+      <form @submit.prevent="submit">
+        <input id="grant_scope" name="grant_scope" type="hidden"
+        :value="requested_scope" />
+        <div class="row">
+          <div class="col-6">
+            <input type="button" @click="consent(false)" id="reject"
+            name="reject" :value="$t('common.reject')"
+            class="btn btn-secondary btn-lg btn-block" />
+          </div>
+          <div class="col-6">
+            <input type="button" @click="consent(true)" id="allow"
+            name="allow" :value="$t('common.accept')"
+            class="btn btn-primary btn-lg btn-block" />
+          </div>
+        </div>
+      </form>
     </div>
-
-    <p class="tos">
-      <i18n path="consent.legal_disclamer">
-        <a slot="terms" target="_blank" :href="app_tos_uri">{{ $t('consent.terms') }}</a>
-        <a slot="privacy_policies" target="_blank"
-        :href="app_policy_uri">{{ $t('consent.privacy_policies') }}</a>
-      </i18n>
-    </p>
-
-    <form @submit.prevent="submit">
-      <input id="grant_scope" name="grant_scope" type="hidden"
-      :value="requested_scope" />
-      <div class="row">
-        <div class="col-6">
-          <input type="button" @click="consent(false)" id="reject"
-          name="reject" :value="$t('common.reject')"
-          class="btn btn-secondary btn-lg btn-block" />
-        </div>
-        <div class="col-6">
-          <input type="button" @click="consent(true)" id="allow"
-          name="allow" :value="$t('common.accept')"
-          class="btn btn-primary btn-lg btn-block" />
-        </div>
-      </div>
-    </form>
-  </div>
+  </boxed-layout>
 </template>
 
 <script>
+import BoxedLayout from '@/layouts/BoxedLayout.vue';
 export default {
+  name: 'Consent',
+  components: {
+    BoxedLayout,
+  },
   data() {
     return {
       app_client_name: '',

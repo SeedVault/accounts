@@ -131,8 +131,18 @@ const UserSchema = mongoose.Schema({
   },
 }, {timestamps: true});
 
+UserSchema.set('toJSON', { getters: true, virtuals: true });
+UserSchema.set('toObject', { getters: true, virtuals: true });
+
 UserSchema.plugin(uniqueValidator, { message: 'domain.user.validation.unique_{PATH}' });
 
+UserSchema.virtual('pictureUrl').get(function () {
+  if (this.picture === '') {
+    return `${process.env.ACCOUNTS_URL}/images/user-default.png`;
+  } else {
+    return `${process.env.ACCOUNTS_URL}/uploads/${this.picture}`;
+  }
+});
 
 UserSchema.pre('save', function(next) {
   if (this.isModified('password')) {
@@ -152,35 +162,6 @@ UserSchema.pre('save', function(next) {
   }
   next();
 });
-
-/* UserSchema.pre('save', function(next) {
-  if (!this.isModified('email')) {
-    return next();
-  }
-  console.log(this.email);
-  console.log(typeof this.email);
-  this.normalizedEmail = this.email.toLowerCase();
-  this.normalizedEmail = this.email.toLowerCase();
-  next();
-});
-*/
-
-/* UserSchema.pre('save', function(next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
-  this.password = Bcrypt.hashSync(this.password, 10);
-  next();
-});
-
-UserSchema.pre('save', function(next) {
-  if (!this.isModified('verificationCode')) {
-    return next();
-  }
-  this.verificationCode = Bcrypt.hashSync(this.verificationCode, 10);
-  next();
-}); */
-
 
 UserSchema.methods.comparePassword = async function(plaintextPassword) {
   return await Bcrypt.compareSync(plaintextPassword, this.password);

@@ -1,81 +1,86 @@
 <template>
-  <div class="text-left">
+  <boxed-layout>
+    <div class="text-left">
 
-    <div class="text-center" v-if="!loading">
-      <h2>{{ $t(title) }}</h2>
-    </div>
+      <div class="text-center" v-if="!loading">
+        <h2>{{ $t(title) }}</h2>
+      </div>
 
-    <div id="enter-email" v-if="!loading && !found">
-      <div class="text-center">
-        <p class="instructions">{{ $t('forgot_password.instructions') }}</p>
-      </div>
-      <validation-box id="_" :validationErrors="validationErrors"></validation-box>
-      <form @submit.prevent="sendMail">
-        <input-text v-model="email" id="email" :label="$t('domain.user.email_address')"
-        :placeholder="$t('domain.user.your_email_address')" type="text"
-        icon="outline-mail-24px@2x.svg"
-        :validationErrors="validationErrors"></input-text>
-        <input type="submit" id="verify" :value="$t('forgot_password.send_code')"
-          class="btn btn-primary btn-lg btn-block"/>
-      </form>
-    </div>
-
-    <div id="sending" class="text-center" v-if="loading || found">
-      <div v-bind:class="[{ 'load-complete': !loading }, 'circle-loader']">
-        <div class="checkmark draw" v-show="reseted"></div>
-        <img :src="require('@/assets/icons/outline-mail-primary-24px@2x.svg')"
-        class="icon envelope-icon" v-show="sent && !loading && !verified" />
-        <img :src="require('@/assets/icons/outline-lock-primary-24px@2x.svg')"
-        class="icon lock-icon" v-show="verified && !loading && !reseted" />
-      </div>
-      <div v-if="loading && !sent">
-        {{ $t('forgot_password.sending_email') }}
-      </div>
-      <div v-if="loading && sent && !verified">
-        {{ $t('forgot_password.verifying_code') }}
-      </div>
-      <div v-if="reseted">
-        {{ $t('forgot_password.reseted') }}
-      </div>
-    </div>
-
-    <div id="code-form" v-if="!loading && sent && found && !verified">
-      <validation-box id="_" :validationErrors="validationErrors"></validation-box>
-      <form @submit.prevent="verify">
-        <input-text v-model="verificationCode" id="verificationCode"
-        :label="$t('forgot_password.please_enter_code')"
-        :placeholder="$t('forgot_password.your_verification_code')"
-        type="text" icon="outline-lock-24px@2x.svg"
-        :validationErrors="validationErrors"></input-text>
-        <input type="submit" id="verify" :value="$t('forgot_password.verify_code')"
-        class="btn btn-primary btn-lg btn-block"/>
-        <div class="resend-email-area">
-          <a @click="sendMail">{{ $t('forgot_password.resend_email') }}</a>
+      <div id="enter-email" v-if="!loading && !found">
+        <div class="text-center">
+          <p class="instructions">{{ $t('forgot_password.instructions') }}</p>
         </div>
-      </form>
-    </div>
+        <validation-box id="_" :validationErrors="validationErrors"></validation-box>
+        <form @submit.prevent="sendMail">
+          <input-text v-model="email" id="email" :label="$t('domain.user.email_address')"
+          :placeholder="$t('domain.user.your_email_address')" type="text"
+          icon="outline-mail-24px@2x.svg"
+          :validationErrors="validationErrors"></input-text>
+          <input type="submit" id="verify" :value="$t('forgot_password.send_code')"
+            class="btn btn-primary btn-lg btn-block"/>
+        </form>
+      </div>
 
-    <div id="password-form" v-if="!loading && sent && found && verified && !reseted">
-      <validation-box id="_" :validationErrors="validationErrors"></validation-box>
-      <form @submit.prevent="changePassword">
-        <input-password v-model="newPassword" id="newPassword" :label="$t('domain.user.new_password')"
-        :placeholder="$t('domain.user.your_new_password')" icon="outline-lock-24px@2x.svg"
-        :validationErrors="validationErrors"></input-password>
-        <input-password v-model="repeatNewPassword" id="repeatNewPassword" :label="$t('domain.user.re_enter_new_password')"
-        :placeholder="$t('domain.user.your_new_password_again')" icon="outline-lock-24px@2x.svg"
-        :validationErrors="validationErrors"></input-password>
-        <input type="submit" id="changePassword" :value="$t('forgot_password.change_password')"
-        class="btn btn-primary btn-lg btn-block"/>
-      </form>
-    </div>
+      <div id="sending" class="text-center" v-if="loading || found">
+        <div v-bind:class="[{ 'load-complete': !loading }, 'circle-loader']">
+          <div class="checkmark draw" v-show="reseted"></div>
+          <img :src="require('@/assets/icons/outline-mail-primary-24px@2x.svg')"
+          class="icon envelope-icon" v-show="sent && !loading && !verified" />
+          <img :src="require('@/assets/icons/outline-lock-primary-24px@2x.svg')"
+          class="icon lock-icon" v-show="verified && !loading && !reseted" />
+        </div>
+        <div v-if="loading && !sent">
+          {{ $t('forgot_password.sending_email') }}
+        </div>
+        <div v-if="loading && sent && !verified">
+          {{ $t('forgot_password.verifying_code') }}
+        </div>
+        <div v-if="reseted">
+          {{ $t('forgot_password.reseted') }}
+        </div>
+      </div>
 
-  </div>
+      <div id="code-form" v-if="!loading && sent && found && !verified">
+        <validation-box id="_" :validationErrors="validationErrors"></validation-box>
+        <form @submit.prevent="verify">
+          <input-text v-model="verificationCode" id="verificationCode"
+          :label="$t('forgot_password.please_enter_code')"
+          :placeholder="$t('forgot_password.your_verification_code')"
+          type="text" icon="outline-lock-24px@2x.svg"
+          :validationErrors="validationErrors"></input-text>
+          <input type="submit" id="verify" :value="$t('forgot_password.verify_code')"
+          class="btn btn-primary btn-lg btn-block"/>
+          <div class="resend-email-area">
+            <a @click="sendMail">{{ $t('forgot_password.resend_email') }}</a>
+          </div>
+        </form>
+      </div>
+
+      <div id="password-form" v-if="!loading && sent && found && verified && !reseted">
+        <validation-box id="_" :validationErrors="validationErrors"></validation-box>
+        <form @submit.prevent="changePassword">
+          <input-password v-model="newPassword" id="newPassword" :label="$t('domain.user.new_password')"
+          :placeholder="$t('domain.user.your_new_password')" icon="outline-lock-24px@2x.svg"
+          :validationErrors="validationErrors"></input-password>
+          <input-password v-model="repeatNewPassword" id="repeatNewPassword" :label="$t('domain.user.re_enter_new_password')"
+          :placeholder="$t('domain.user.your_new_password_again')" icon="outline-lock-24px@2x.svg"
+          :validationErrors="validationErrors"></input-password>
+          <input type="submit" id="changePassword" :value="$t('forgot_password.change_password')"
+          class="btn btn-primary btn-lg btn-block"/>
+        </form>
+      </div>
+
+    </div>
+  </boxed-layout>
 </template>
 
 <script>
-import BoxedLayoutVue from '../layouts/BoxedLayout.vue';
-
+import BoxedLayout from '@/layouts/BoxedLayout.vue';
 export default {
+  name: 'ForgotPassword',
+  components: {
+    BoxedLayout,
+  },
   data() {
     return {
       title: 'forgot_password.forgot_your_password',

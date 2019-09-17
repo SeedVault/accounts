@@ -7,6 +7,10 @@ Vue.use(Vuex);
 // https://github.com/stefangabos/world_countries/blob/master/data/en/countries.json
 export default new Vuex.Store({
   state: {
+    lang: 'en',
+    userChecked: false,
+    user: null,
+    logo: '/images/application_logo_accounts.svg',
     allRoles: ['user', 'developer', 'publisher'],
     allCountries: [
       'af', 'al', 'dz', 'ad', 'ao', 'ag', 'ar', 'am', 'au', 'at', 'az', 'bs',
@@ -27,18 +31,66 @@ export default new Vuex.Store({
       'ug', 'ua', 'ae', 'gb', 'us', 'uy', 'uz', 'vu', 've', 'vn', 'ye', 'zm',
       'zw',
     ],
+    menu: [
+      {
+        text: 'app.profile',
+        icon: 'outline-account_circle-24px@2x.svg',
+        target: 'profile-view',
+      },
+      {
+        text: 'app.password',
+        icon: 'outline-lock-24px@2x.svg',
+        target: 'change-password',
+      },
+    ],
+    apps: [
+      {
+        text: 'apps.greenhouse',
+        icon: 'outline-app-24px@2x.svg',
+        url: `${process.env.NODE_ENV === 'production' ? 'https://greenhouse-dev.seedtoken.io' : 'https://127.0.0.1:9002'}/{{ locale }}/dashboard`,
+      },
+      {
+        text: 'apps.wallet',
+        icon: 'outline-app-24px@2x.svg',
+        url: `${process.env.NODE_ENV === 'production' ? 'https://wallet-dev.seedtoken.io' : 'https://127.0.0.1:9001'}/{{ locale }}/dashboard`,
+      },
+    ],
   },
   getters: {
     /* eslint-disable no-shadow */
+    lang: state => state.lang,
+    apps: state => state.apps,
+    user: state => state.user,
+    userChecked: state => state.userChecked,
+    menu: state => state.menu,
+    logo: state => state.logo,
     allCountries: state => state.allCountries,
     allRoles: state => state.allRoles,
   },
   mutations: {
+    SET_LANG(state, params) {
+      state.lang = params.lang;
+    },
+    SET_USER(state, params) {
+      state.user = params.user;
+    },
+    SET_USER_CHECKED(state, params) {
+      state.userChecked = params.userChecked;
+    },
     /* SET_COUNTRIES(state, params) {
       state.countries = countryService.getCountriesByLocale(params.locale);
     }, */
   },
   actions: {
+    setLang({ commit }, params) {
+      commit('SET_LANG', params);
+    },
+    setUser({ commit }, params) {
+      commit('SET_USER', params);
+    },
+    setUserChecked({ commit }, params) {
+      commit('SET_USER_CHECKED', params);
+    },
     /* setCountriesByLocale({ commit }, params) {
       commit('SET_COUNTRIES', params);
     }, */

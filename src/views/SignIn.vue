@@ -1,53 +1,59 @@
 <template>
-  <div class="text-left">
-    <div class="text-center">
-      <h2>{{ $t('sign_in.sign_in') }}</h2>
-      <p>
-        <strong>
-        {{ $t('sign_in.or') }}
-        <router-link :to="{ name: 'sign-up'}">{{ $t('sign_in.sign_up') }}</router-link>
-        </strong>
-      </p>
+  <boxed-layout>
+    <div class="text-left">
+      <div class="text-center">
+        <h2>{{ $t('sign_in.sign_in') }}</h2>
+        <p>
+          <strong>
+          {{ $t('sign_in.or') }}
+          <router-link :to="{ name: 'sign-up'}">{{ $t('sign_in.sign_up') }}</router-link>
+          </strong>
+        </p>
+      </div>
+
+      <validation-box id="_" :validationErrors="validationErrors"></validation-box>
+
+      <form @submit.prevent="login">
+
+        <input-text v-model="email" id="email" :label="$t('domain.user.email_address')"
+        :placeholder="$t('domain.user.your_email_address')" icon="outline-mail-24px@2x.svg"
+        :validationErrors="validationErrors"></input-text>
+
+        <input-password v-model="password" id="password" :label="$t('domain.user.password')"
+        :placeholder="$t('domain.user.your_password')" icon="outline-lock-24px@2x.svg"
+        :validationErrors="validationErrors"></input-password>
+
+        <fieldset role="group" class="form-group">
+          <div role="group">
+            <div class="form-row">
+              <div class="col order-2" style="text-align: right;">
+                <router-link :to="{ name: 'forgot-password'}">{{ $t('sign_in.forgot_password') }}</router-link>
+              </div>
+              <div class="col order-1">
+                <input-checkbox v-model="remember" id="remember"
+                  :label="$t('sign_in.keep_me_logged_in')"></input-checkbox>
+                </div>
+            </div>
+          </div>
+        </fieldset>
+
+          <input type="submit" id="accept" :value="$t('sign_in.sign_in_button')"
+          class="btn btn-primary btn-lg btn-block"/>
+
+      </form>
+
     </div>
 
-    <validation-box id="_" :validationErrors="validationErrors"></validation-box>
-
-    <form @submit.prevent="login">
-
-      <input-text v-model="email" id="email" :label="$t('domain.user.email_address')"
-      :placeholder="$t('domain.user.your_email_address')" icon="outline-mail-24px@2x.svg"
-      :validationErrors="validationErrors"></input-text>
-
-      <input-password v-model="password" id="password" :label="$t('domain.user.password')"
-      :placeholder="$t('domain.user.your_password')" icon="outline-lock-24px@2x.svg"
-      :validationErrors="validationErrors"></input-password>
-
-      <fieldset role="group" class="form-group">
-        <div role="group">
-          <div class="form-row">
-            <div class="col order-2" style="text-align: right;">
-              <router-link :to="{ name: 'forgot-password'}">{{ $t('sign_in.forgot_password') }}</router-link>
-            </div>
-            <div class="col order-1">
-              <input-checkbox v-model="remember" id="remember"
-                :label="$t('sign_in.keep_me_logged_in')"></input-checkbox>
-              </div>
-          </div>
-        </div>
-      </fieldset>
-
-        <input type="submit" id="accept" :value="$t('sign_in.sign_in_button')"
-        class="btn btn-primary btn-lg btn-block"/>
-
-    </form>
-
-  </div>
-
-
+  </boxed-layout>
 </template>
 
 <script>
+import BoxedLayout from '@/layouts/BoxedLayout.vue';
 export default {
+  name: 'SignIn',
+  components: {
+    BoxedLayout,
+  },
   data() {
     return {
       email: '',

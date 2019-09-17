@@ -4,9 +4,9 @@
       <div class="col-sm-4"></div>
       <div class="col-sm-4 main-container">
         <div class="text-center">
-          <img class="logo" src="@/assets/images/accounts-logo.png" />
+          <img class="logo" src="@/assets/images/accounts-logo.svg" />
         </div>
-        <router-view/>
+        <slot/>
         <footer>
           <div class="row">
             <div class="col col-sm-5">

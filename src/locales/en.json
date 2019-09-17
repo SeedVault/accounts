@@ -244,7 +244,17 @@
     "terms": "Terms",
     "accept": "Accept",
     "reject": "Reject",
-    "save": "Save"
+    "modify": "Modify",
+    "save": "Save",
+    "please_wait": "Please wait...",
+    "yes": "Yes",
+    "no": "No",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "oops": "Oops!",
+    "something_went_wrong": "Something went wrong",
+    "click_to_change_picture": "Click to change picture",
+    "save_picture": "Save picture"
   },
   "sign_in": {
     "or": "or",
@@ -299,5 +309,28 @@
     "verified": "Verified",
     "change_password": "Change password",
     "reseted": "Password updated"
+  },
+  "app": {
+    "profile": "Profile",
+    "password": "Password",
+    "sign_out": "Sign Out"
+  },
+  "apps": {
+    "accounts": "Accounts",
+    "wallet": "Wallet",
+    "greenhouse": "Greenhouse"
+  },
+  "home": {
+    "title": "Identity made simple",
+    "subheadline": "Universal identity and access management platform for web, mobile, IoT, and more.",
+    "call_to_action": "Access your account"
+  },
+  "legal": {
+    "tos": {
+      "terms_of_service": "Terms of Service"
+    },
+    "privacy": {
+      "privacy_policy": "Privacy Policy"
+    }
   }
 }

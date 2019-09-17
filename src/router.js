@@ -1,24 +1,20 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
-// import EmptyRouter from './views/EmptyRouter.vue';
-import BoxedLayout from '@/layouts/BoxedLayout.vue';
+import axios from 'axios';
+import EmptyRouter from './views/EmptyRouter.vue';
 import i18n from './i18n';
+import store from './store';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: 'history',
+  linkActiveClass: 'active',
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: Home,
-    },
-    {
       path: '/:locale',
-      component: BoxedLayout, // EmptyRouter,
+      component: EmptyRouter,
       props: true,
       beforeEnter(to, from, next) {
         const { locale } = to.params;
@@ -28,9 +24,25 @@ export default new Router({
         if (i18n.locale !== locale) {
           i18n.locale = locale;
         }
+        store.dispatch('setLang', { lang: i18n.locale });
         next();
       },
       children: [
+        {
+          path: 'home',
+          name: 'home',
+          component: () => import(/* webpackChunkName: "auth" */ './views/Home.vue'),
+        },
+        {
+          path: 'legal/policy',
+          name: 'legal-privacy',
+          component: () => import(/* webpackChunkName: "auth" */ './views/LegalPrivacy.vue'),
+        },
+        {
+          path: 'legal/tos',
+          name: 'legal-terms',
+          component: () => import(/* webpackChunkName: "auth" */ './views/LegalTerms.vue'),
+        },
         {
           path: 'sign-in',
           name: 'sign-in',
@@ -56,6 +68,18 @@ export default new Router({
           name: 'consent',
           component: () => import(/* webpackChunkName: "auth" */ './views/Consent.vue'),
         },
+        {
+          path: 'profile',
+          name: 'profile-view',
+          component: () => import(/* webpackChunkName: "accounts" */ './views/ProfileView.vue'),
+          meta: { authenticated: true },
+        },
+        {
+          path: 'password',
+          name: 'change-password',
+          component: () => import(/* webpackChunkName: "accounts" */ './views/ChangePassword.vue'),
+          meta: { authenticated: true },
+        },
       ],
     },
     {
@@ -73,3 +97,28 @@ export default new Router({
     }, */
   ],
 });
+
+router.beforeEach(async (to, from, next) => {
+  if (!store.getters.userChecked) {
+    try {
+      const response = await axios.get('/auth/me');
+      store.dispatch('setUser', { user: response.data });
+      store.dispatch('setUserChecked', { userChecked: true });
+    } catch (error) {
+      if (error.response.status === 403) {
+        store.dispatch('setUser', { user: null });
+        store.dispatch('setUserChecked', { userChecked: true });
+      } else {
+        // Something went wrong. Ignore it.
+      }
+    }
+  }
+
+  if (to.matched.some(record => record.meta.authenticated) && !store.getters.user) {
+    window.location.href = '/auth/do-login';
+  } else {
+    next();
+  }
+});
+
+export default router;

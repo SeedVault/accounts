@@ -13,6 +13,14 @@ class UserNotFoundError extends ValidationError {
   }
 }
 
+class ForbiddenUserError extends ValidationError {
+  constructor(message) {
+    super(message);
+    this.name = 'ForbiddenUserError';
+    this.errors['_'] = { message: 'domain.user.validation.forbidden_user' };
+  }
+}
+
 class PasswordsDontMatchError extends ValidationError {
   constructor(message) {
     super(message);
@@ -116,6 +124,18 @@ const UserService = {
       throw new UserNotFoundError();
     }
     return user;
+  },
+
+  findMyUserById: async (username, id) => {
+    let user = await User.findById(id).exec();
+    if (!user) {
+      throw new UserNotFoundError();
+    }
+    if (user.username === username) {
+      return user;
+    } else {
+      throw new ForbiddenUserError('');
+    }
   },
 
   findUserByEmail: async (email) => {
@@ -264,10 +284,16 @@ const UserService = {
     }
     return results;
   },
+
+  updateUser: async (username, user) => {
+    await UserService.findMyUserById(username, user._id);
+    return await user.save();
+  },
 };
 
 module.exports = {
   UserNotFoundError,
+  ForbiddenUserError,
   InvalidCredentialsError,
   UnverifiedAccountError,
   DisabledAccountError,

@@ -244,7 +244,17 @@
     "terms": "Condiciones",
     "accept": "Aceptar",
     "reject": "Rechazar",
-    "save": "Guardar"
+    "modify": "Modificar",
+    "save": "Guardar",
+    "please_wait": "Por favor espera...",
+    "yes": "Si",
+    "no": "No",
+    "createdAt": "Registrado",
+    "updatedAt": "Actualizado",
+    "oops": "¡Oops!",
+    "something_went_wrong": "Algo salió mal",
+    "click_to_change_picture": "Click para cambiar imagen",
+    "save_picture": "Guardar imagen"
   },
   "sign_in": {
     "or": "ó",
@@ -299,5 +309,28 @@
     "verified": "Verificado",
     "change_password": "Cambiar contraseña",
     "reseted": "Contraseña actualizada"
+  },
+  "app": {
+    "profile": "Perfil",
+    "password": "Contraseña",
+    "sign_out": "Salir"
+  },
+  "apps": {
+    "accounts": "Accounts",
+    "wallet": "Wallet",
+    "greenhouse": "Greenhouse"
+  },
+  "home": {
+    "title": "Identidad simplificada",
+    "subheadline": "Plataforma universal para administrar identidad y acceso para webs, móvil, IoT y más.",
+    "call_to_action": "Ingresa a tu cuenta"
+  },
+  "legal": {
+    "tos": {
+      "terms_of_service": "Condiciones del Servicio"
+    },
+    "privacy": {
+      "privacy_policy": "Política de Privacidad"
+    }
   }
 }

@@ -10,6 +10,8 @@ import LocaleChanger from 'seed-theme/src/components/LocaleChanger.vue';
 import IconInsideInput from 'seed-theme/src/components/IconInsideInput.vue';
 import ValidationBox from 'seed-theme/src/components/ValidationBox.vue';
 import ValidationMessages from 'seed-theme/src/components/ValidationMessages.vue';
+import Oops from 'seed-theme/src/components/Oops.vue';
+import LoadingCircle from 'seed-theme/src/components/LoadingCircle.vue';
 import axios from 'axios';
 import App from './App.vue';
 import router from './router';
@@ -26,6 +28,8 @@ Vue.component('input-checkbox', InputCheckbox);
 Vue.component('locale-changer', LocaleChanger);
 Vue.component('validation-box', ValidationBox);
 Vue.component('validation-messages', ValidationMessages);
+Vue.component('oops', Oops);
+Vue.component('loading-circle', LoadingCircle);
 
 Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
@@ -39,6 +43,20 @@ Vue.prototype.normalizeErrors = (errors) => {
   }
   return data;
 };
+
+Vue.filter('toDate', (value, format) => {
+  const date = new Date(value);
+  let locale = 'en-US';
+  if (i18n.locale === 'es') {
+    locale = 'es-AR';
+  }
+  switch (format) {
+    case 'short':
+      return date.toLocaleDateString(locale);
+    default:
+      return value;
+  }
+});
 
 new Vue({
   router,

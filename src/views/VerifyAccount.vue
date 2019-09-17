@@ -1,62 +1,69 @@
 <template>
-  <div class="text-left">
+  <boxed-layout>
+    <div class="text-left">
 
 
-    <div id="user-not-found" class="text-center" v-if="userNotFound">
-      <img :src="require('@/assets/icons/outline-error_outline-20px@2x.svg')"
-        class="icon not-found-icon" />
-      <h3 class="error">{{ $t('domain.user.validation.user_not_found') }}</h3>
-    </div>
-
-    <div v-if="!userNotFound">
-
-
-      <div id="sending" class="text-center">
-        <div v-bind:class="[{ 'load-complete': !loading }, 'circle-loader']">
-          <div class="checkmark draw" v-show="verified"></div>
-          <img :src="require('@/assets/icons/outline-mail-primary-24px@2x.svg')"
-          class="icon envelope-icon" v-show="sent && !loading && !verified" />
-        </div>
-        <div v-if="loading && !sent">
-          {{ $t('verify_account.sending_email') }}
-        </div>
-        <div v-if="loading && sent && !verified">
-          {{ $t('verify_account.verifying_code') }}
-        </div>
-        <div v-if="verified">
-          {{ $t('verify_account.verified') }}
-        </div>
+      <div id="user-not-found" class="text-center" v-if="userNotFound">
+        <img :src="require('@/assets/icons/outline-error_outline-20px@2x.svg')"
+          class="icon not-found-icon" />
+        <h3 class="error">{{ $t('domain.user.validation.user_not_found') }}</h3>
       </div>
 
+      <div v-if="!userNotFound">
 
-      <div id="code-form" v-if="sent && !loading && !verified">
 
-        <validation-box id="_" :validationErrors="validationErrors"></validation-box>
-
-        <form @submit.prevent="verify">
-
-          <input-text v-model="verificationCode" id="verificationCode"
-          :label="$t('verify_account.please_enter_code')"
-          :placeholder="$t('verify_account.your_verification_code')"
-          type="text" icon="outline-lock-24px@2x.svg"
-          :validationErrors="validationErrors"></input-text>
-
-          <input type="submit" id="verify" :value="$t('verify_account.verify')"
-          class="btn btn-primary btn-lg btn-block"/>
-
-          <div class="resend-email-area">
-            <a @click="sendMail">{{ $t('verify_account.resend_email') }}</a>
+        <div id="sending" class="text-center">
+          <div v-bind:class="[{ 'load-complete': !loading }, 'circle-loader']">
+            <div class="checkmark draw" v-show="verified"></div>
+            <img :src="require('@/assets/icons/outline-mail-primary-24px@2x.svg')"
+            class="icon envelope-icon" v-show="sent && !loading && !verified" />
           </div>
+          <div v-if="loading && !sent">
+            {{ $t('verify_account.sending_email') }}
+          </div>
+          <div v-if="loading && sent && !verified">
+            {{ $t('verify_account.verifying_code') }}
+          </div>
+          <div v-if="verified">
+            {{ $t('verify_account.verified') }}
+          </div>
+        </div>
 
-        </form>
+
+        <div id="code-form" v-if="sent && !loading && !verified">
+
+          <validation-box id="_" :validationErrors="validationErrors"></validation-box>
+
+          <form @submit.prevent="verify">
+
+            <input-text v-model="verificationCode" id="verificationCode"
+            :label="$t('verify_account.please_enter_code')"
+            :placeholder="$t('verify_account.your_verification_code')"
+            type="text" icon="outline-lock-24px@2x.svg"
+            :validationErrors="validationErrors"></input-text>
+
+            <input type="submit" id="verify" :value="$t('verify_account.verify')"
+            class="btn btn-primary btn-lg btn-block"/>
+
+            <div class="resend-email-area">
+              <a @click="sendMail">{{ $t('verify_account.resend_email') }}</a>
+            </div>
+
+          </form>
+        </div>
       </div>
     </div>
-  </div>
+  </boxed-layout>
 </template>
 
 <script>
 
+import BoxedLayout from '@/layouts/BoxedLayout.vue';
 export default {
+  name: 'VerifyAccount',
+  components: {
+    BoxedLayout,
+  },
   data() {
     return {
       userNotFound: false,
