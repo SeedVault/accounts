@@ -16,6 +16,7 @@ const profile = {
         firstname: user.firstname,
         lastname: user.lastname,
         username: user.username,
+        fullname: user.fullname,
         email: user.email,
         countryCode: user.countryCode,
         role: user.role,
