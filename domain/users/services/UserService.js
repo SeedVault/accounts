@@ -1,6 +1,7 @@
 const { User, AccountStatus } = require('../entities/User');
 const LoginCredentials = require('../validators/LoginCredentials');
 const PasswordResetCode = require('../validators/PasswordResetCode');
+const PasswordChange = require('../validators/PasswordChange');
 const mailer = require('../../services/mailer');
 const ValidationError = require('mongoose/lib/error/validation');
 const { SeedTokenAPIClientEthereumETHPersonal } = require('seedtoken-api-client');
@@ -289,6 +290,27 @@ const UserService = {
     await UserService.findMyUserById(username, user._id);
     return await user.save();
   },
+
+  changePassword: async (email, plaintextCurrentPassword,
+    plaintextNewPassword, plaintextRepeatNewPassword) => {
+    var data = new PasswordChange({
+        email,
+        password: plaintextCurrentPassword,
+        newPassword: plaintextNewPassword,
+        repeatNewPassword: plaintextRepeatNewPassword
+      });
+    console.log(data);
+    await PasswordChange.check(data);
+    let user = await UserService.loginWithPassword(data.email, data.password);
+    if (user.accountStatus === AccountStatus.DISABLED) {
+      throw new DisabledAccountError();
+    }
+    if (data.newPassword !== data.repeatNewPassword) {
+      throw new PasswordsDontMatchError();
+    }
+    user.password = data.newPassword;
+    await user.save();
+  },
 };
 
 module.exports = {
@@ -297,5 +319,6 @@ module.exports = {
   InvalidCredentialsError,
   UnverifiedAccountError,
   DisabledAccountError,
+  PasswordsDontMatchError,
   UserService,
 }

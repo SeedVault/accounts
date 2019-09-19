@@ -75,6 +75,12 @@ const router = new Router({
           meta: { authenticated: true },
         },
         {
+          path: 'profile/edit',
+          name: 'profile-form',
+          component: () => import(/* webpackChunkName: "accounts" */ './views/ProfileForm.vue'),
+          meta: { authenticated: true },
+        },
+        {
           path: 'password',
           name: 'change-password',
           component: () => import(/* webpackChunkName: "accounts" */ './views/ChangePassword.vue'),

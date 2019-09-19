@@ -144,6 +144,10 @@ UserSchema.virtual('pictureUrl').get(function () {
   }
 });
 
+UserSchema.virtual('fullname').get(function () {
+  return `${this.firstname} ${this.lastname}`;
+});
+
 UserSchema.pre('save', function(next) {
   if (this.isModified('password')) {
     this.password = Bcrypt.hashSync(this.password, 10);

@@ -9,7 +9,7 @@
       <form @submit.prevent="signup">
 
         <input-text v-model="firstname" id="firstname" :label="$t('domain.user.first_name')"
-        placeholder="First name" icon="outline-person-24px@2x.svg"
+        :placeholder="$t('domain.user.your_first_name')" icon="outline-person-24px@2x.svg"
         :validationErrors="validationErrors"></input-text>
 
         <input-text v-model="lastname" id="lastname" :label="$t('domain.user.last_name')"

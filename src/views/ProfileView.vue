@@ -14,15 +14,17 @@
               <div class="col-md-3">
                 <picture-changer ref="pictureChanger" @picture-saved="onPictureSaved"></picture-changer>
               </div>
-
               <div class="col-md-7">
-                <h1 class="view__title">{{ firstname }} {{ lastname }}</h1>
-                <p>by <strong>{{ username }}</strong></p>
-                </div>
-                <div class="col-md-2">
-                  <button type="submit" class="btn btn-sm btn-primary btn-block mb-2" @click="editComponent()">{{ $t('common.modify') }}</button>
-                </div>
+                <h1 class="view__title">{{ fullname }}</h1>
+                <p class="view__subtitle">@{{ username }}</p>
+                <p><img class="view__icon" :src="require('@/assets/icons/outline-mail-24px@2x.svg')" /> {{ email }}</p>
+                <p><img class="view__icon" :src="require('@/assets/icons/outline-location_on-24px@2x.svg')" /> {{ countryName }}</p>
+                <!-- <p>{{ createdAt | toDate('short') }}</p> -->
               </div>
+              <div class="col-md-2">
+                  <button type="submit" class="btn btn-sm btn-primary btn-block mb-2" @click="editProfile()">{{ $t('common.modify') }}</button>
+              </div>
+            </div>
 
           </div>
         </div>
@@ -49,6 +51,7 @@ export default {
       email: '',
       firstname: '',
       lastname: '',
+      fullname: '',
       countryCode: '',
       role: '',
       picture: '',
@@ -71,6 +74,7 @@ export default {
           this.email = result.data.email;
           this.firstname = result.data.firstname;
           this.lastname = result.data.lastname;
+          this.fullname = result.data.fullname;
           this.countryCode = result.data.countryCode;
           this.role = result.data.role;
           this.picture = result.data.picture;
@@ -94,7 +98,18 @@ export default {
       currentUser.picture = newPictureUrl;
       this.$store.dispatch('setUser', { user: currentUser });
     },
+    editProfile() {
+      this.$router.push({ name: 'profile-form' });
+    },
   },
+  computed: {
+    countryName() {
+      if (this.countryCode === '') {
+        return '';
+      }
+      return this.$i18n.t(`domain.countries.${this.countryCode}`);
+    }
+  }
 };
 </script>
 
@@ -116,13 +131,13 @@ export default {
   }
 
   &__subtitle {
-    margin-top: 2rem;
+    margin-bottom: 3rem;
+    font-weight: 500;
     font-size: 1.2rem;
-    color: #212529;
   }
 
-  &__updatedAt {
-    margin-left: 20px;
+  &__icon {
+    margin-right: 10px;
   }
 }
 

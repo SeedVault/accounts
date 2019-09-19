@@ -240,6 +240,7 @@
     }
   },
   "common": {
+    "back": "Regresar",
     "privacy": "Privacidad",
     "terms": "Condiciones",
     "accept": "Aceptar",
@@ -332,5 +333,17 @@
     "privacy": {
       "privacy_policy": "Política de Privacidad"
     }
+  },
+  "profile": {
+    "modify_profile": "Modificar perfil",
+    "change_password": "Cambiar contraseña",
+    "current_password": "Contraseña actual",
+    "current_password_placeholder": "Ingresa tu contraseña actual",
+    "new_password": "Nueva contraseña",
+    "new_password_placeholder": "Ingresa la nueva contraseña",
+    "repeat_new_password": "Vuelve a tipear la nueva contraseña",
+    "repeat_new_password_placeholder": "Vuelve a ingresar la nueva contraseña",
+    "password_updated": "Contraseña modificada",
+    "wrong_password": "La contraseña no es correcta"
   }
 }

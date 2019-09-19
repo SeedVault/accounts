@@ -196,6 +196,7 @@ module.exports = function(app) {
 
   // Profiles
   app.get('/api/profile', profile.view);
+  app.post('/api/profile', profile.update);
+  app.post('/api/profile/change-password', profile.changePassword);
   app.post('/api/profile/change-picture', upload.single('pictureFile'), profile.changePicture);
-
 }
