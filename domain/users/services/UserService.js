@@ -208,7 +208,7 @@ const UserService = {
       throw new DisabledAccountError();
     }
     if (user.accountStatus === AccountStatus.UNVERIFIED) {
-      const st = new SeedTokenAPIClientEthereumETHPersonal(process.env.PARITY_URL);
+      const st = SeedTokenAPIClientEthereumETHPersonal.getInstance(process.env.PARITY_URL);
       user.walletAddress = await st.createAccount(process.env.PARITY_TEST_ADDRESS_PASSPHRASE || '');
       await st.transfer(
         process.env.PARITY_TEST_ADDRESS,
