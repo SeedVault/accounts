@@ -139,6 +139,18 @@ const UserService = {
     }
   },
 
+  findUserByUsernameOrEmail: async (usernameOrEmail) => {
+    const query = {$or: [
+      { normalizedEmail: usernameOrEmail.toLowerCase() },
+      { normalizedUsername: usernameOrEmail.toLowerCase() }
+    ]}
+    let user = await User.findOne(query).exec();
+    if (!user) {
+      throw new UserNotFoundError();
+    }
+    return user;
+  },
+
   findUserByEmail: async (email) => {
     let user = await User.findOne({ normalizedEmail: email.toLowerCase() }).exec();
     if (!user) {
@@ -178,13 +190,13 @@ const UserService = {
     });
   },
 
-  loginWithPassword: async (email, plaintextPassword) => {
+  loginWithPassword: async (usernameOrEmail, plaintextPassword) => {
     var credentials = new LoginCredentials({
-      email,
+      usernameOrEmail,
       password: plaintextPassword
     });
     await LoginCredentials.check(credentials);
-    let user = await UserService.findUserByEmail(email);
+    let user = await UserService.findUserByUsernameOrEmail(usernameOrEmail);
     let match = await user.comparePassword(plaintextPassword);
     if (!match) {
       throw new InvalidCredentialsError();

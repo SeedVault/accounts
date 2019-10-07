@@ -78,6 +78,12 @@ describe('The Sign In form', () => {
     expect(true);
   });
 
+  it('should allow a verified user to log in with a valid username and password', async () => {
+    const user = await createAndVerifyJohnDoe();
+    await userService.loginWithPassword(user.username.toUpperCase(), 'secret');
+    expect(true);
+  });
+
   it('should throw validation errors when passed empty data', async () => {
     try {
       await userService.loginWithPassword();

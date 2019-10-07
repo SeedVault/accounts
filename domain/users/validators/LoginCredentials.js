@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
 
 const LoginCredentialsSchema = mongoose.Schema({
-  email: {
+  usernameOrEmail: {
     type: String,
     lowercase: true,
     required: [true, 'validation.required'],
-    match: [/\S+@\S+\.\S+/, 'validation.email'],
+    // match: [/\S+@\S+\.\S+/, 'validation.email'],
     trim: true
   },
   password: {
