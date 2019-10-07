@@ -16,6 +16,7 @@ const UserSchema = mongoose.Schema({
     match: [/^[a-zA-Z0-9]+$/, 'validation.regex'],
     index: true,
     unique: true,
+    uniqueCaseInsensitive: true,
     trim: true
   },
   normalizedUsername: {
@@ -25,6 +26,7 @@ const UserSchema = mongoose.Schema({
     match: [/^[a-z0-9]+$/, 'validation.regex'],
     index: true,
     unique: true,
+    uniqueCaseInsensitive: true,
     trim: true
   },
   email: {
@@ -32,6 +34,7 @@ const UserSchema = mongoose.Schema({
     required: [true, 'validation.required'],
     match: [/\S+@\S+\.\S+/, 'validation.email'],
     unique: true,
+    uniqueCaseInsensitive: true,
     index: true,
     trim: true
   },
@@ -40,6 +43,7 @@ const UserSchema = mongoose.Schema({
     lowercase: true,
     match: [/\S+@\S+\.\S+/, 'validation.email'],
     unique: true,
+    uniqueCaseInsensitive: true,
     index: true,
     trim: true
   },
@@ -102,6 +106,7 @@ const UserSchema = mongoose.Schema({
     trim: true,
     default: '',
     unique: true,
+    uniqueCaseInsensitive: true,
     index: true,
   },
   normalizedWalletAddress: {
@@ -110,6 +115,7 @@ const UserSchema = mongoose.Schema({
     trim: true,
     default: '',
     unique: true,
+    uniqueCaseInsensitive: true,
     index: true,
   },
   password: {

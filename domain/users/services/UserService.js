@@ -93,26 +93,32 @@ const UserService = {
       } catch (err) {
         if (err instanceof ValidationError) {
           if (err.errors.normalizedUsername) {
-            err.errors.username = err.errors.normalizedUsername;
-            err.errors.username.message = 'domain.user.validation.unique_username';
-            err.errors.username.path = 'username';
-            delete(err.errors.normalizedUsername);
+            if (err.errors.normalizedUsername.message == 'domain.user.validation.unique_normalizedUsername') {
+              err.errors.username = err.errors.normalizedUsername;
+              err.errors.username.message = 'domain.user.validation.unique_username';
+              err.errors.username.path = 'username';
+              delete(err.errors.normalizedUsername);
+            }
           }
         }
         if (err instanceof ValidationError) {
           if (err.errors.normalizedEmail) {
-            err.errors.email = err.errors.normalizedEmail;
-            err.errors.email.message = 'domain.user.validation.unique_email';
-            err.errors.email.path = 'email';
-            delete(err.errors.normalizedEmail);
+            if (err.errors.normalizedUsername.message == 'domain.user.validation.unique_normalizedEmail') {
+              err.errors.email = err.errors.normalizedEmail;
+              err.errors.email.message = 'domain.user.validation.unique_email';
+              err.errors.email.path = 'email';
+              delete(err.errors.normalizedEmail);
+            }
           }
         }
         if (err instanceof ValidationError) {
           if (err.errors.normalizedWalletAddress) {
-            err.errors.walletAddress = err.errors.normalizedWalletAddress;
-            err.errors.walletAddress.message = 'domain.user.validation.unique_walletAddress';
-            err.errors.walletAddress.path = 'walletAddress';
-            delete(err.errors.normalizedWalletAddress);
+            if (err.errors.normalizedUsername.message == 'domain.user.validation.unique_normalizedWalletAddress') {
+              err.errors.walletAddress = err.errors.normalizedWalletAddress;
+              err.errors.walletAddress.message = 'domain.user.validation.unique_walletAddress';
+              err.errors.walletAddress.path = 'walletAddress';
+              delete(err.errors.normalizedWalletAddress);
+            }
           }
         }
         throw err;

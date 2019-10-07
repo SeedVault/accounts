@@ -16,13 +16,13 @@
           :placeholder="$t('domain.user.your_last_name')" icon="outline-person-24px@2x.svg"
           :validationErrors="validationErrors"></input-text>
 
-        <input-text v-model="username" id="username" :label="$t('domain.user.username')"
-        :placeholder="$t('domain.user.your_username')" icon="outline-person-24px@2x.svg"
-        :validationErrors="validationErrors"></input-text>
-
         <input-text v-model="email" id="email" :label="$t('domain.user.email_address')"
         :placeholder="$t('domain.user.your_email_address')"
         icon="outline-mail-24px@2x.svg" :validationErrors="validationErrors"></input-text>
+
+        <input-text v-model="username" id="username" :label="$t('domain.user.username')"
+        :placeholder="$t('domain.user.your_username')" icon="outline-person-24px@2x.svg"
+        :validationErrors="validationErrors"></input-text>
 
         <input-select v-model="countryCode" :options="countries" id="countryCode"
         :label="$t('domain.user.country')" :placeholder="$t('domain.user.your_country')"
