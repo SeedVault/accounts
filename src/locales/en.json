@@ -263,7 +263,8 @@
     "sign_up": "sign up",
     "sign_in_button": "Sign in",
     "forgot_password": "Forgot password?",
-    "keep_me_logged_in": "Keep me logged in"
+    "keep_me_logged_in": "Keep me logged in",
+    "username_or_email_address": "Username or E-mail address"
   },
   "sign_up": {
     "sign_up": "Sign Up",

@@ -44,8 +44,8 @@
       </form>
       <div class="legal-footer">
         <i18n path="sign_up.legal_disclamer">
-          <a place="terms" href="#">{{ $t('sign_up.terms') }}</a>
-          <a place="privacy_policy" href="#">{{ $t('sign_up.privacy_policy') }}</a>
+          <a slot="terms" href="#">{{ $t('sign_up.terms') }}</a>
+          <a slot="privacy_policy" href="#">{{ $t('sign_up.privacy_policy') }}</a>
         </i18n>
       </div>
     </div>

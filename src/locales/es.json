@@ -263,7 +263,8 @@
     "sign_up": "crear cuenta",
     "sign_in_button": "Ingresar",
     "forgot_password": "¿Olvidaste tu constraseña?",
-    "keep_me_logged_in": "Recuérdame"
+    "keep_me_logged_in": "Recuérdame",
+    "username_or_email_address": "Usuario ó correo electrónico"
   },
   "sign_up": {
     "sign_up": "Crear cuenta",

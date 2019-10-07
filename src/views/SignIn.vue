@@ -15,7 +15,7 @@
 
       <form @submit.prevent="login">
 
-        <input-text v-model="email" id="email" :label="$t('domain.user.email_address')"
+        <input-text v-model="email" id="email" :label="$t('sign_in.username_or_email_address')"
         :placeholder="$t('domain.user.your_email_address')" icon="outline-mail-24px@2x.svg"
         :validationErrors="validationErrors"></input-text>
 
@@ -23,7 +23,7 @@
         :placeholder="$t('domain.user.your_password')" icon="outline-lock-24px@2x.svg"
         :validationErrors="validationErrors"></input-password>
 
-        <fieldset role="group" class="form-group">
+        <fieldset role="group" class="form-group mb-4">
           <div role="group">
             <div class="form-row">
               <div class="col order-2" style="text-align: right;">
