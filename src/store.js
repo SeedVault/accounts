@@ -14,7 +14,7 @@ export default new Vuex.Store({
     logoImage: '/images/logo_accounts.svg',
     logoText: '/images/text_accounts.svg',
     logoTextWidth: '132px',
-    allRoles: ['user', 'developer', 'publisher'],
+    allRoles: ['developer', 'publisher', 'user', 'administrator', 'node operator', 'researcher'],
     allCountries: [
       'af', 'al', 'dz', 'ad', 'ao', 'ag', 'ar', 'am', 'au', 'at', 'az', 'bs',
       'bh', 'bd', 'bb', 'by', 'be', 'bz', 'bj', 'bt', 'bo', 'ba', 'bw', 'br',

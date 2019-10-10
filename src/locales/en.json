@@ -10,7 +10,10 @@
     "roles": {
       "user": "User",
       "developer": "Developer",
-      "publisher": "Publisher"
+      "publisher": "Publisher",
+      "administrator": "Administrator",
+      "node operator": "Node Operator",
+      "researcher": "Researcher"
     },
     "countries": {
       "af": "Afghanistan",

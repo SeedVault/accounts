@@ -116,6 +116,7 @@ export default {
           text: this.$i18n.t(`domain.countries.${this.allCountries[i]}`),
         });
       }
+      this.countryCode = 'us';
       return countryList;
     },
   },

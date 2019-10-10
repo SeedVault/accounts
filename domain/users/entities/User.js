@@ -89,7 +89,7 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: [true, 'validation.required'],
     enum:  {
-      values: ['user', 'developer', 'publisher'],
+      values: ['developer', 'publisher', 'user', 'administrator', 'node operator', 'researcher'],
       message: 'validation.option'
     },
     trim: true,
