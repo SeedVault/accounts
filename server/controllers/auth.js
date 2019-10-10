@@ -49,6 +49,7 @@ const auth = {
       if (err instanceof ValidationError) {
         res.status(422).json(err);
       } else {
+        // console.log(err);
         return res.status(500).json(err);
       }
     }
@@ -91,6 +92,7 @@ const auth = {
       return res.json({redirect: response.redirect_to});
     })
     .catch(function (error) {
+      console.log(error);
       next(error);
     });
   },
@@ -199,7 +201,7 @@ const auth = {
       // you have available.
       res.cookie('XSRF-TOKEN', req.csrfToken(), {secure: true});
       res.cookie('challenge', String(challenge), {secure: true});
-      console.log(user);
+      // console.log(user);
       var data = {
         requested_scope: String(response.requested_scope),
         user: String(response.subject),

@@ -4,7 +4,7 @@ const PasswordResetCode = require('../validators/PasswordResetCode');
 const PasswordChange = require('../validators/PasswordChange');
 const mailer = require('../../services/mailer');
 const ValidationError = require('mongoose/lib/error/validation');
-const { SeedTokenAPIClientEthereumETHPersonal } = require('seedtoken-api-client');
+const { SeedTokenAPIClientEthereumETHPersonal } = require('@seed-vault/seedtoken-api-client');
 
 class UserNotFoundError extends ValidationError {
   constructor(message) {
