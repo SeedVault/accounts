@@ -6,7 +6,7 @@ Vue.use(Vuex);
 // Data source:
 // https://github.com/stefangabos/world_countries/blob/master/data/en/countries.json
 var appGreenhouseUrl = 'https://127.0.0.1:9002';
-var appWalletUrl = 'https://127.0.0.1:9002';
+var appWalletUrl = 'https://127.0.0.1:9001';
 if (process.env.NODE_ENV === 'production') {
   if (window.location.hostname === 'accounts.seedtoken.io') {
     appGreenhouseUrl = 'https://greenhouse-dev.seedtoken.io';
