@@ -50,12 +50,12 @@ export default new Vuex.Store({
       {
         text: 'apps.greenhouse',
         icon: 'outline-app-24px@2x.svg',
-        url: `${process.env.NODE_ENV === 'production' ? 'https://greenhouse-dev.seedtoken.io' : 'https://127.0.0.1:9002'}/{{ locale }}/dashboard`,
+        url: `${process.env.NODE_ENV === 'production' ? process.env.GREENHOUSE_URL : 'https://127.0.0.1:9002'}/{{ locale }}/dashboard`,
       },
       {
         text: 'apps.wallet',
         icon: 'outline-app-24px@2x.svg',
-        url: `${process.env.NODE_ENV === 'production' ? 'https://wallet-dev.seedtoken.io' : 'https://127.0.0.1:9001'}/{{ locale }}/dashboard`,
+        url: `${process.env.NODE_ENV === 'production' ? process.env.WALLET_URL : 'https://127.0.0.1:9001'}/{{ locale }}/dashboard`,
       },
     ],
   },
