@@ -15,7 +15,14 @@ const auth = {
       let challenge = query.login_challenge;
       let response = await hydra.getLoginRequest(challenge);
       // if (response.skip && user.accountStatus == 1) {
-      if (response.skip) {
+      // if (response.skip) {
+      let alreadyAuthenticated = false;
+      if (typeof res.local !== 'undefined') {
+        if (typeof res.local.user !== 'undefined') {
+          alreadyAuthenticated = true;
+        }
+      }
+      if (response.skip || alreadyAuthenticated) {
         return hydra.acceptLoginRequest(challenge, {
           // Confirm that we indeed want to log in the user
           subject: response.subject
