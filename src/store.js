@@ -5,6 +5,18 @@ Vue.use(Vuex);
 
 // Data source:
 // https://github.com/stefangabos/world_countries/blob/master/data/en/countries.json
+var appGreenhouseUrl = 'https://127.0.0.1:9002';
+var appWalletUrl = 'https://127.0.0.1:9002';
+if (process.env.NODE_ENV === 'production') {
+  if (window.location.hostname === 'accounts.seedtoken.io') {
+    appGreenhouseUrl = 'https://greenhouse-dev.seedtoken.io';
+    appWalletUrl = 'https://wallet-dev.seedtoken.io';
+  } else {
+    appGreenhouseUrl = 'https://greenhouse.seedtoken.io';
+    appWalletUrl = 'https://wallet.seedtoken.io';
+  }
+}
+
 export default new Vuex.Store({
   state: {
     lang: 'en',
@@ -50,12 +62,12 @@ export default new Vuex.Store({
       {
         text: 'apps.greenhouse',
         icon: 'outline-app-24px@2x.svg',
-        url: `${process.env.NODE_ENV === 'production' ? process.env.GREENHOUSE_URL : 'https://127.0.0.1:9002'}/{{ locale }}/dashboard`,
+        url: `${appGreenhouseUrl}/{{ locale }}/dashboard`
       },
       {
         text: 'apps.wallet',
         icon: 'outline-app-24px@2x.svg',
-        url: `${process.env.NODE_ENV === 'production' ? process.env.WALLET_URL : 'https://127.0.0.1:9001'}/{{ locale }}/dashboard`,
+        url: `${appWalletUrl}/{{ locale }}/dashboard`,
       },
     ],
   },
