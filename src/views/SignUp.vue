@@ -34,6 +34,10 @@
         icon="outline-location_on-24px@2x.svg"
         :validationErrors="validationErrors"></input-select>
 
+        <input-text v-model="referralCode" id="referralCode" :label="$t('domain.user.referral_code')"
+        :placeholder="$t('domain.user.your_referral_code')" icon="icon-key-24px.svg"
+        :validationErrors="validationErrors"></input-text>
+
         <input-password v-model="password" id="password" :label="$t('domain.user.password')"
         :placeholder="$t('domain.user.your_password')" icon="outline-lock-24px@2x.svg"
         :validationErrors="validationErrors"></input-password>
@@ -67,6 +71,7 @@ export default {
       email: '',
       countryCode: 'US',
       role: 'user',
+      referralCode: '',
       password: '',
       validationErrors: [],
     };
@@ -82,6 +87,7 @@ export default {
         email: this.email,
         countryCode: this.countryCode,
         role: this.role,
+        referralCode: this.referralCode,
         password: this.password,
       })
         .then(() => {

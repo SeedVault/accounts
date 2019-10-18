@@ -9,6 +9,20 @@ const AccountStatus = {
   DISABLED: 2,
 }
 
+const ReferralCodeSchema = mongoose.Schema({
+  referralCode: {
+    type: String,
+    required: [true, 'validation.required'],
+    unique: true,
+    uniqueCaseInsensitive: true,
+    trim: true
+  },
+  enabled: {
+    type: Boolean,
+    default: true
+  }
+});
+
 const UserSchema = mongoose.Schema({
   username: {
     type: String,
@@ -128,6 +142,11 @@ const UserSchema = mongoose.Schema({
     trim: true,
     default: ''
   },
+  referralCode: {  // A valid referral code from ReferralCodeSchema
+    type: String,
+    required: [true, 'validation.required'],
+    trim: true
+  },
   accountStatus: { // 0: Unverified: 1: Account verified, 2: Account disabled
     type: Number,
     min: [AccountStatus.UNVERIFIED, 'validation.option'],
@@ -183,5 +202,6 @@ UserSchema.methods.compareVerificationCode = async function(plaintextVerificatio
 
 module.exports = {
   AccountStatus,
+  ReferralCode: mongoose.model('ReferralCodes', ReferralCodeSchema),
   User: mongoose.model('Users', UserSchema)
 }

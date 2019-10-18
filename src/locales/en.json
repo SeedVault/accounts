@@ -229,6 +229,8 @@
       "your_country": "Your country",
       "role": "Role",
       "your_role": "Your role",
+      "referral_code": "Referral code",
+      "your_referral_code": "Your referral code",
       "validation": {
         "unique_email": "E-mail already exists.",
         "unique_username": "Username already exists.",
@@ -238,6 +240,7 @@
         "account_unverified": "The account has not yet been verified",
         "invalid_credentials": "Invalid credentials",
         "code_not_valid": "Code not valid",
+        "referral_code_not_valid": "Referral code not valid",
         "passwords_dont_match": "Passwords don't match"
       }
     }

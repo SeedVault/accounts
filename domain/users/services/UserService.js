@@ -1,4 +1,4 @@
-const { User, AccountStatus } = require('../entities/User');
+const { User, ReferralCode, AccountStatus } = require('../entities/User');
 const LoginCredentials = require('../validators/LoginCredentials');
 const PasswordResetCode = require('../validators/PasswordResetCode');
 const PasswordChange = require('../validators/PasswordChange');
@@ -29,7 +29,6 @@ class PasswordsDontMatchError extends ValidationError {
     this.errors['_'] = { message: 'domain.user.validation.passwords_dont_match' };
   }
 }
-
 
 class InvalidCodeError extends ValidationError {
   constructor(message) {
@@ -63,13 +62,44 @@ class DisabledAccountError extends ValidationError {
   }
 }
 
+class InvalidReferralCodeError extends ValidationError {
+  constructor(message) {
+    super(message);
+    this.name = 'InvalidReferralCodeError';
+    this.errors['referralCode'] = { message: 'domain.user.validation.referral_code_not_valid' };
+  }
+}
+
 const UserService = {
 
+  createReferralCode: async(referralCode) => {
+    let rc = await ReferralCode.findOne({ referralCode }).exec();
+    if (!rc) {
+      rc = new ReferralCode({ referralCode });
+      return await rc.save();
+    }
+    return rc;
+  },
+
+  referralCodeExist: async (referralCode) => {
+    let rc = await ReferralCode.findOne({ referralCode: referralCode, enabled: true }).exec();
+    if (!rc) {
+      return false;
+    }
+    return true;
+  },
+
   saveRegistrationForm: async (username, email, firstname, lastname, countryCode,
-    role, plaintextPassword) => {
+    role, referralCode, plaintextPassword) => {
       let normalizedUsername = '';
       let normalizedEmail = '';
       let normalizedWalletAddress = '';
+      if (referralCode !== '') {
+        let rc = await ReferralCode.findOne({ referralCode: referralCode, enabled: true }).exec();
+        if (!rc) {
+          throw new InvalidReferralCodeError();
+        }
+      }
       if (username) {
         normalizedUsername = username.toLowerCase();
       }
@@ -85,6 +115,7 @@ const UserService = {
         lastname,
         countryCode,
         role,
+        referralCode,
         password: plaintextPassword,
         walletAddress: email,  // unique arbitrary value
       });

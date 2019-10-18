@@ -1,8 +1,12 @@
 import {
-  UserService as userService, UserNotFoundError, InvalidCredentialsError,
+  UserService as userService, InvalidCredentialsError,
   UnverifiedAccountError, DisabledAccountError,
 } from '../../../domain/users/services/UserService';
 import mailer from '../../../domain/services/mailer';
+
+async function createReferralCode() {
+  await userService.createReferralCode('TESTCODE01');
+}
 
 async function createUser(email, username) {
   return userService.saveRegistrationForm(
@@ -12,11 +16,13 @@ async function createUser(email, username) {
     'Doe',
     'us',
     'user',
+    'TESTCODE01',
     'secret',
   );
 }
 
 async function createJohnDoe() {
+  await createReferralCode();
   return createUser('johndoe@email.com', 'johndoe');
 }
 
@@ -26,6 +32,7 @@ async function getVerificationCodeFromLastEmail() {
 }
 
 async function createAndVerifyUser(email, username) {
+  await createReferralCode();
   const user = await createUser(email, username);
   await userService.sendVerificationCodeByEmail(user.email, 'en');
   const verificationCode = await getVerificationCodeFromLastEmail();
@@ -44,7 +51,17 @@ describe('The Sign Up from', () => {
 
   it('should throw validation errors when passed empty data', async () => {
     try {
-      await userService.saveRegistrationForm();
+      await createReferralCode();
+      await userService.saveRegistrationForm(
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        'TESTCODE01',
+        '',
+      );
     } catch (err) {
       expect(err.name).toBe('ValidationError');
     }
@@ -66,6 +83,25 @@ describe('The Sign Up from', () => {
       await createUser(user.email, 'newUsername');
     } catch (err) {
       expect(err.errors.email.message).toBe('domain.user.validation.unique_email');
+    }
+  });
+
+  it('should throw a validation error when the referral code is invalid', async () => {
+    try {
+      await userService.saveRegistrationForm(
+        'testusername',
+        'testusername@email.com',
+        'John',
+        'Doe',
+        'us',
+        'user',
+        'INVALID_CODE',
+        'secret',
+      );
+      // Expected the function to throw an error. But it didn't throw anything.
+      throw new Error('unexpected success');
+    } catch (err) {
+      expect(err.errors.referralCode.message).toBe('domain.user.validation.referral_code_not_valid');
     }
   });
 });

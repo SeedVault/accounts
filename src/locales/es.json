@@ -229,6 +229,8 @@
       "your_country": "Tu país",
       "role": "Rol",
       "your_role": "Tu rol",
+      "referral_code": "Código de referido",
+      "your_referral_code": "Tu código de referido",
       "validation": {
         "unique_email": "El e-mail ya existe.",
         "unique_username": "El nombre de usuario ya existe.",
@@ -238,6 +240,7 @@
         "account_unverified": "La cuenta aún no ha sido verificada",
         "invalid_credentials": "Credenciales no válidas",
         "code_not_valid": "El código no es válido",
+        "referral_code_not_valid": "El código de referido no es válido",
         "passwords_dont_match": "Las contraseñas son diferentes"
       }
     }

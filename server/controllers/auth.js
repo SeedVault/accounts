@@ -115,6 +115,7 @@ const auth = {
         req.body.lastname,
         req.body.countryCode,
         req.body.role,
+        req.body.referralCode,
         req.body.password
       );
       res.status(201).json({saved: true});
