@@ -5,17 +5,6 @@ Vue.use(Vuex);
 
 // Data source:
 // https://github.com/stefangabos/world_countries/blob/master/data/en/countries.json
-var appGreenhouseUrl = 'https://127.0.0.1:9002';
-var appWalletUrl = 'https://127.0.0.1:9001';
-if (process.env.NODE_ENV === 'production') {
-  if (window.location.hostname === 'accounts.seedtoken.io') {
-    appGreenhouseUrl = 'https://greenhouse-dev.seedtoken.io';
-    appWalletUrl = 'https://wallet-dev.seedtoken.io';
-  } else {
-    appGreenhouseUrl = 'https://greenhouse.seedtoken.io';
-    appWalletUrl = 'https://wallet.seedtoken.io';
-  }
-}
 
 export default new Vuex.Store({
   state: {
@@ -48,33 +37,40 @@ export default new Vuex.Store({
     ],
     menu: [
       {
+        id: 1,
         text: 'app.profile',
         icon: 'outline-account_circle-24px@2x.svg',
         target: 'profile-view',
       },
       {
+        id: 2,
         text: 'app.password',
         icon: 'outline-lock-24px@2x.svg',
         target: 'change-password',
       },
-    ],
-    apps: [
       {
-        text: 'apps.greenhouse',
-        icon: 'outline-app-24px@2x.svg',
-        url: `${appGreenhouseUrl}/{{ locale }}/dashboard`
+        id: 3,
+        type: 'divider',
+        text: '',
+        icon: '',
       },
       {
+        id: 4,
+        text: 'apps.greenhouse',
+        icon: 'outline-app-24px@2x.svg',
+        url: `${GREENHOUSE_URL}/{{ locale }}/dashboard`
+      },
+      {
+        id: 5,
         text: 'apps.wallet',
         icon: 'outline-app-24px@2x.svg',
-        url: `${appWalletUrl}/{{ locale }}/dashboard`,
+        url: `${WALLET_URL}/{{ locale }}/dashboard`,
       },
     ],
   },
   getters: {
     /* eslint-disable no-shadow */
     lang: state => state.lang,
-    apps: state => state.apps,
     user: state => state.user,
     userChecked: state => state.userChecked,
     menu: state => state.menu,

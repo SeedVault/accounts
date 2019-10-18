@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const server = require('./server/app');
 
 module.exports = {
@@ -15,5 +16,15 @@ module.exports = {
       localeDir: 'locales',
       enableInSFC: true,
     },
+  },
+
+  configureWebpack: {
+    plugins: [
+      new webpack.DefinePlugin({
+        ACCOUNTS_URL: JSON.stringify(process.env.ACCOUNTS_URL),
+        WALLET_URL: JSON.stringify(process.env.WALLET_URL),
+        GREENHOUSE_URL: JSON.stringify(process.env.GREENHOUSE_URL),
+      }),
+    ],
   },
 };
