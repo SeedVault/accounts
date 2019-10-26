@@ -277,9 +277,12 @@
     "or": "ó",
     "sign_in": "Iniciar sesión",
     "sign_up_button": "Registrate",
-    "legal_disclamer": "Al registrarte estás aceptando nuestras {terms} y {privacy_policy}",
+    "legal_disclaimer": "Al registrarte estás aceptando nuestras {terms} y {privacy_policy}",
     "terms": "Condiciones de uso",
-    "privacy_policy": "Política de privacidad"
+    "privacy_policy": "Política de privacidad",
+    "disclaimer_text": "Estás participan en una prueba beta de SEED's Greenhouse. Al hacerlo, aceptas que SEED no se hace responsable por ninguna pérdida, daño, malversación u otro impacto sobre tus datos ni por cualquier daño de cualquier tipo causado por datos de terceros. Durante esta prueba beta, los tokens SEED no tienen dinero en efectivo ni ningún otro valor y solo se usan para fines experimentales.",
+    "disclaimer_text_2": "Si aún no te has registrado para la prueba beta, puedes hacerlo en: {registration_url}",
+    "i_have_a_referral_code": "Tengo un código de referido"
   },
   "verify_account": {
     "sending_email": "Enviando un e-mail con tu código",
@@ -294,7 +297,7 @@
     "authorize_app": "Autorizar App",
     "hello_user": "¡Hola {user}!",
     "app_requests_access": "{app_client_name} solicita acceso a tu cuenta:",
-    "legal_disclamer": "Al hacer click en Aceptar permites a esta app utilizar tu información conforme a sus respectivas {terms} y {privacy_policies}.",
+    "legal_disclaimer": "Al hacer click en Aceptar permites a esta app utilizar tu información conforme a sus respectivas {terms} y {privacy_policies}.",
     "terms": "Condiciones de uso",
     "privacy_policies": "Políticas de privacidad",
     "scope": {

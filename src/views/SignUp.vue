@@ -6,7 +6,17 @@
         <p><strong>{{ $t('sign_up.or') }}
         <router-link :to="{ name: 'sign-in'}">{{ $t('sign_up.sign_in') }}</router-link></strong></p>
       </div>
-      <form @submit.prevent="signup">
+      <div id="disclaimer" class="disclaimer" v-show="disclaimer">
+        <p>{{ $t('sign_up.disclaimer_text') }}</p>
+        <p>
+          <i18n path="sign_up.disclaimer_text_2">
+            <a slot="registration_url" href="https://developers.seedtoken.io/private-beta">https://developers.seedtoken.io/private-beta</a>
+          </i18n>
+        </p>
+        <input type="button" :value="$t('sign_up.i_have_a_referral_code')"
+          class="btn btn-primary btn-lg btn-block mt-5" @click="disclaimer = false" />
+      </div>
+      <form @submit.prevent="signup" v-show="!disclaimer">
 
         <input-text v-model="firstname" id="firstname" :label="$t('domain.user.first_name')"
         :placeholder="$t('domain.user.your_first_name')" icon="outline-person-24px@2x.svg"
@@ -46,8 +56,8 @@
         class="btn btn-primary btn-lg btn-block"/>
 
       </form>
-      <div class="legal-footer">
-        <i18n path="sign_up.legal_disclamer">
+      <div class="legal-footer" v-show="!disclaimer">
+        <i18n path="sign_up.legal_disclaimer">
           <a slot="terms" href="#">{{ $t('sign_up.terms') }}</a>
           <a slot="privacy_policy" href="#">{{ $t('sign_up.privacy_policy') }}</a>
         </i18n>
@@ -65,6 +75,7 @@ export default {
   },
   data() {
     return {
+      disclaimer: true,
       firstname: '',
       lastname: '',
       username: '',
@@ -141,5 +152,11 @@ h2 {
 .legal-footer {
   margin: 30px 0px;
   color: #a0a6ad;
+}
+
+.disclaimer {
+  margin-top: 2rem !important;
+  color: #323743;
+  text-align: justify;
 }
 </style>

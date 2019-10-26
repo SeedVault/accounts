@@ -277,9 +277,12 @@
     "or": "or",
     "sign_in": "sign in",
     "sign_up_button": "Sign up",
-    "legal_disclamer": "By signing up you're accepting our {terms} and {privacy_policy}",
+    "legal_disclaimer": "By signing up you're accepting our {terms} and {privacy_policy}",
     "terms": "Terms",
-    "privacy_policy": "Privacy policy"
+    "privacy_policy": "Privacy policy",
+    "disclaimer_text": "You are participating in a beta test of SEED’s Greenhouse. By doing so you agree that SEED is not responsible for any lost, damaged, misdirected or other impacts on your data and/or for any damages of any kind caused by any third party data. During this beta test, SEED tokens have no cash or other value and are for experimental purposes only.",
+    "disclaimer_text_2": "If you have not registered for the beta program, you can register here: {registration_url}",
+    "i_have_a_referral_code": "I have a referral code"
   },
   "verify_account": {
     "sending_email": "Sending an e-mail with your code",
@@ -294,7 +297,7 @@
     "authorize_app": "Authorize App",
     "hello_user": "Hello {user}!",
     "app_requests_access": "{app_client_name} is requesting access to your account:",
-    "legal_disclamer": "By clicking Accept, you allow this app to use your information in accordance with their respective {terms} and {privacy_policies}.",
+    "legal_disclaimer": "By clicking Accept, you allow this app to use your information in accordance with their respective {terms} and {privacy_policies}.",
     "terms": "Terms",
     "privacy_policies": "Privacy policies",
     "scope": {
@@ -333,7 +336,7 @@
     "subheadline": "Universal identity and access management platform for web, mobile, IoT, and more.",
     "call_to_action": "Access your account",
     "disclaimer": "Disclaimer",
-    "disclaimer_text": "You are participating in a beta test of SEED’s Greenhouse.  By doing so you agree that SEED is not responsible for any lost, damaged, misdirected or other impacts on your data and/or for any damages of any kind caused by any third party data. During this beta test, SEED tokens have no cash or other value and are for experimental purposes only."
+    "disclaimer_text": "You are participating in a beta test of SEED’s Greenhouse. By doing so you agree that SEED is not responsible for any lost, damaged, misdirected or other impacts on your data and/or for any damages of any kind caused by any third party data. During this beta test, SEED tokens have no cash or other value and are for experimental purposes only."
   },
   "legal": {
     "tos": {
