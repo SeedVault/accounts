@@ -331,7 +331,9 @@
   "home": {
     "title": "Identity made simple",
     "subheadline": "Universal identity and access management platform for web, mobile, IoT, and more.",
-    "call_to_action": "Access your account"
+    "call_to_action": "Access your account",
+    "disclaimer": "Disclaimer",
+    "disclaimer_text": "You are participating in a beta test of SEED’s Greenhouse.  By doing so you agree that SEED is not responsible for any lost, damaged, misdirected or other impacts on your data and/or for any damages of any kind caused by any third party data. During this beta test, SEED tokens have no cash or other value and are for experimental purposes only."
   },
   "legal": {
     "tos": {
