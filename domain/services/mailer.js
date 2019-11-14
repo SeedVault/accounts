@@ -6,7 +6,7 @@ const fs = require('fs');
 let transport = {};
 
 switch (process.env.NODE_ENV) {
-  case 'testing':
+  case 'test':
     // Mock
     transport = {
       inbox: [],

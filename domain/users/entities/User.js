@@ -163,9 +163,9 @@ UserSchema.plugin(uniqueValidator, { message: 'domain.user.validation.unique_{PA
 
 UserSchema.virtual('pictureUrl').get(function () {
   if (this.picture === '') {
-    return `${process.env.ACCOUNTS_URL}/images/user-default.png`;
+    return `${process.env.VUE_APP_ACCOUNTS_URL}/images/user-default.png`;
   } else {
-    return `${process.env.ACCOUNTS_URL}/uploads/${this.picture}`;
+    return `${process.env.VUE_APP_ACCOUNTS_URL}/uploads/${this.picture}`;
   }
 });
 

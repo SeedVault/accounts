@@ -61,6 +61,7 @@
 
 <script>
 import BoxedLayout from '@/layouts/BoxedLayout.vue';
+
 export default {
   name: 'Consent',
   components: {
@@ -113,7 +114,7 @@ export default {
           window.location.href = response.data.redirect;
         })
         .catch((error) => {
-          alert(error.response.status);
+          console.error(error.response.status);
         });
     },
   },

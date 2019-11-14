@@ -27,7 +27,9 @@
           <div role="group">
             <div class="form-row">
               <div class="col order-2" style="text-align: right;">
-                <router-link :to="{ name: 'forgot-password'}">{{ $t('sign_in.forgot_password') }}</router-link>
+                <router-link :to="{ name: 'forgot-password'}">
+                  {{ $t('sign_in.forgot_password') }}
+                </router-link>
               </div>
               <div class="col order-1">
                 <input-checkbox v-model="remember" id="remember"
@@ -49,6 +51,7 @@
 
 <script>
 import BoxedLayout from '@/layouts/BoxedLayout.vue';
+
 export default {
   name: 'SignIn',
   components: {

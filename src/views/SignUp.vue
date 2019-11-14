@@ -4,13 +4,15 @@
       <div class="text-center">
         <h2>{{ $t('sign_up.sign_up') }}</h2>
         <p><strong>{{ $t('sign_up.or') }}
-        <router-link :to="{ name: 'sign-in'}">{{ $t('sign_up.sign_in') }}</router-link></strong></p>
+        <router-link :to="{ name: 'sign-in'}">{{ $t('sign_up.sign_in') }}</router-link>
+        </strong></p>
       </div>
       <div id="disclaimer" class="disclaimer" v-show="disclaimer">
         <p>{{ $t('sign_up.disclaimer_text') }}</p>
         <p>
           <i18n path="sign_up.disclaimer_text_2">
-            <a slot="registration_url" href="https://developers.seedtoken.io/private-beta">https://developers.seedtoken.io/private-beta</a>
+            <a slot="registration_url" href="https://developers.seedtoken.io/private-beta">
+            https://developers.seedtoken.io/private-beta</a>
           </i18n>
         </p>
         <input type="button" :value="$t('sign_up.i_have_a_referral_code')"
@@ -44,7 +46,8 @@
         icon="outline-location_on-24px@2x.svg"
         :validationErrors="validationErrors"></input-select>
 
-        <input-text v-model="referralCode" id="referralCode" :label="$t('domain.user.referral_code')"
+        <input-text v-model="referralCode" id="referralCode"
+        :label="$t('domain.user.referral_code')"
         :placeholder="$t('domain.user.your_referral_code')" icon="icon-key-24px.svg"
         :validationErrors="validationErrors"></input-text>
 
@@ -68,6 +71,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import BoxedLayout from '@/layouts/BoxedLayout.vue';
+
 export default {
   name: 'SignUp',
   components: {
@@ -80,7 +84,7 @@ export default {
       lastname: '',
       username: '',
       email: '',
-      countryCode: 'US',
+      countryCode: 'us',
       role: 'user',
       referralCode: '',
       password: '',
@@ -108,7 +112,7 @@ export default {
           if (error.response.status === 422) {
             that.validationErrors = this.normalizeErrors(error.response);
           } else {
-            alert(error.response.status);
+            console.error(error.response.status);
           }
         });
     },
@@ -117,7 +121,7 @@ export default {
     ...mapGetters(['allCountries', 'allRoles']),
     roles() {
       const roleList = [];
-      for (let i = 0; i < this.allRoles.length; i++) {
+      for (let i = 0; i < this.allRoles.length; i += 1) {
         roleList.push({
           value: this.allRoles[i],
           text: this.$i18n.t(`domain.roles.${this.allRoles[i]}`),
@@ -127,13 +131,13 @@ export default {
     },
     countries() {
       const countryList = [];
-      for (let i = 0; i < this.allCountries.length; i++) {
+      for (let i = 0; i < this.allCountries.length; i += 1) {
         countryList.push({
           value: this.allCountries[i],
           text: this.$i18n.t(`domain.countries.${this.allCountries[i]}`),
         });
       }
-      this.countryCode = 'us';
+      // this.countryCode = 'us';
       return countryList;
     },
   },

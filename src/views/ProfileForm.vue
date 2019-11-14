@@ -8,8 +8,10 @@
         <div class="card box">
           <div class="card-body">
 
-            <router-link class="nav-link back" :to="{ name: 'profile-view' }" v-show="!saving && !saved">
-              <img :src="require('@/assets/icons/outline-icon-back-24px.svg')" /> {{ $t('common.back') }}
+            <router-link class="nav-link back" :to="{ name: 'profile-view' }"
+            v-show="!saving && !saved">
+              <img :src="require('@/assets/icons/outline-icon-back-24px.svg')" />
+              {{ $t('common.back') }}
             </router-link>
 
             <div class="saving text-center" v-show="saving || saved">
@@ -34,32 +36,39 @@
 
                   <div class="form-row">
                     <div class="form-group col-md-12">
-                      <input-text v-model="firstname" id="firstname" :label="$t('domain.user.first_name')"
-                      :placeholder="$t('domain.user.your_first_name')" icon="outline-person-24px@2x.svg"
+                      <input-text v-model="firstname" id="firstname"
+                      :label="$t('domain.user.first_name')"
+                      :placeholder="$t('domain.user.your_first_name')"
+                      icon="outline-person-24px@2x.svg"
                       :validationErrors="validationErrors"></input-text>
                     </div>
                   </div>
 
                   <div class="form-row">
                     <div class="form-group col-md-12">
-                      <input-text v-model="lastname" id="lastname" :label="$t('domain.user.last_name')"
-                      :placeholder="$t('domain.user.your_last_name')" icon="outline-person-24px@2x.svg"
+                      <input-text v-model="lastname" id="lastname"
+                      :label="$t('domain.user.last_name')"
+                      :placeholder="$t('domain.user.your_last_name')"
+                      icon="outline-person-24px@2x.svg"
                       :validationErrors="validationErrors"></input-text>
                     </div>
                   </div>
 
                   <div class="form-row">
                     <div class="form-group col-md-12">
-                      <input-text v-model="email" id="email" :label="$t('domain.user.email_address')"
+                      <input-text v-model="email" id="email"
+                      :label="$t('domain.user.email_address')"
                       :placeholder="$t('domain.user.your_email_address')"
-                      icon="outline-mail-24px@2x.svg" :validationErrors="validationErrors"></input-text>
+                      icon="outline-mail-24px@2x.svg"
+                      :validationErrors="validationErrors"></input-text>
                     </div>
                   </div>
 
                   <div class="form-row">
                     <div class="form-group col-md-12">
                       <input-select v-model="countryCode" :options="countries" id="countryCode"
-                      :label="$t('domain.user.country')" :placeholder="$t('domain.user.your_country')"
+                      :label="$t('domain.user.country')"
+                      :placeholder="$t('domain.user.your_country')"
                       icon="outline-location_on-24px@2x.svg"
                       :validationErrors="validationErrors"></input-select>
                     </div>
@@ -96,6 +105,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import AppLayout from 'seed-theme/src/layouts/AppLayout.vue';
+
 export default {
   name: 'ProfileForm',
   components: {
@@ -124,7 +134,7 @@ export default {
   methods: {
     getData() {
       this.loading = true;
-      this.axios.get(`/api/profile`)
+      this.axios.get('/api/profile')
         .then((result) => {
           this.loading = false;
           this.firstname = result.data.firstname;
@@ -134,7 +144,7 @@ export default {
           this.countryCode = result.data.countryCode;
           this.role = result.data.role;
         })
-        .catch((error) => {
+        .catch(() => {
           this.loading = false;
           this.oops = true;
         });
@@ -150,10 +160,10 @@ export default {
         countryCode: this.countryCode,
         role: this.role,
       })
-        .then((result) => {
+        .then(() => {
           this.saving = false;
           this.saved = true;
-          let currentUser = this.$store.getters.user;
+          const currentUser = this.$store.getters.user;
           currentUser.email = this.email;
           this.$store.dispatch('setUser', { user: currentUser });
           this.$router.push({ name: 'profile-view' });
@@ -172,7 +182,7 @@ export default {
     ...mapGetters(['allCountries', 'allRoles']),
     roles() {
       const roleList = [];
-      for (let i = 0; i < this.allRoles.length; i++) {
+      for (let i = 0; i < this.allRoles.length; i += 1) {
         roleList.push({
           value: this.allRoles[i],
           text: this.$i18n.t(`domain.roles.${this.allRoles[i]}`),
@@ -182,7 +192,7 @@ export default {
     },
     countries() {
       const countryList = [];
-      for (let i = 0; i < this.allCountries.length; i++) {
+      for (let i = 0; i < this.allCountries.length; i += 1) {
         countryList.push({
           value: this.allCountries[i],
           text: this.$i18n.t(`domain.countries.${this.allCountries[i]}`),

@@ -59,10 +59,12 @@
       <div id="password-form" v-if="!loading && sent && found && verified && !reseted">
         <validation-box id="_" :validationErrors="validationErrors"></validation-box>
         <form @submit.prevent="changePassword">
-          <input-password v-model="newPassword" id="newPassword" :label="$t('domain.user.new_password')"
+          <input-password v-model="newPassword" id="newPassword"
+          :label="$t('domain.user.new_password')"
           :placeholder="$t('domain.user.your_new_password')" icon="outline-lock-24px@2x.svg"
           :validationErrors="validationErrors"></input-password>
-          <input-password v-model="repeatNewPassword" id="repeatNewPassword" :label="$t('domain.user.re_enter_new_password')"
+          <input-password v-model="repeatNewPassword" id="repeatNewPassword"
+          :label="$t('domain.user.re_enter_new_password')"
           :placeholder="$t('domain.user.your_new_password_again')" icon="outline-lock-24px@2x.svg"
           :validationErrors="validationErrors"></input-password>
           <input type="submit" id="changePassword" :value="$t('forgot_password.change_password')"
@@ -76,6 +78,7 @@
 
 <script>
 import BoxedLayout from '@/layouts/BoxedLayout.vue';
+
 export default {
   name: 'ForgotPassword',
   components: {
@@ -126,7 +129,7 @@ export default {
             this.userNotFound = (this.validationErrors._[0].msg
             === 'domain.user.validation.user_not_found');
           } else {
-            alert(`Something went wrong: ${error.response.status}`);
+            console.error(`Something went wrong: ${error.response.status}`);
           }
         });
     },
@@ -152,7 +155,7 @@ export default {
           if (error.response.status === 422) {
             this.validationErrors = this.normalizeErrors(error.response);
           } else {
-            alert(`Something went wrong: ${error.response.status}`);
+            console.error(`Something went wrong: ${error.response.status}`);
           }
         });
     },
@@ -166,7 +169,7 @@ export default {
         newPassword: this.newPassword,
         repeatNewPassword: this.repeatNewPassword,
       })
-        .then((response) => {
+        .then(() => {
           const that = this;
           this.loading = false;
           this.reseted = true;
@@ -180,7 +183,7 @@ export default {
           if (error.response.status === 422) {
             this.validationErrors = this.normalizeErrors(error.response);
           } else {
-            alert(`Something went wrong: ${error.response.status}`);
+            console.error(`Something went wrong: ${error.response.status}`);
           }
         });
     },

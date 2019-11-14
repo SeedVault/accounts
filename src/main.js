@@ -38,8 +38,13 @@ Vue.prototype.axios = axios;
 // Register function to normalize mongoose validation messages
 Vue.prototype.normalizeErrors = (errors) => {
   const data = [];
-  for (const [key, value] of Object.entries(errors.data.errors)) {
+  /* for (const [key, value] of Object.entries(errors.data.errors)) {
     data[key] = [{ msg: value.message }];
+  } */
+  const keys = Object.keys(errors.data.errors);
+  const values = Object.values(errors.data.errors);
+  for (let i = 0; i < keys.length; i += 1) {
+    data[keys[i]] = [{ msg: values[i].message }];
   }
   return data;
 };

@@ -13,7 +13,8 @@
             {{ $t('home.subheadline') }}
           </p>
           <div class="text-center text-md-left">
-            <router-link :to="{ name: 'profile-view'}" class="btn btn-primary lift mr-1 access-button">
+            <router-link :to="{ name: 'profile-view'}"
+              class="btn btn-primary lift mr-1 access-button">
               {{ $t('home.call_to_action') }}
               <img :src="require('@/assets/icons/ArrowOut-white@2x.svg')"
               class="d-none d-md-inline ml-3"/>

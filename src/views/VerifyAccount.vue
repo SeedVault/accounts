@@ -2,7 +2,6 @@
   <boxed-layout>
     <div class="text-left">
 
-
       <div id="user-not-found" class="text-center" v-if="userNotFound">
         <img :src="require('@/assets/icons/outline-error_outline-20px@2x.svg')"
           class="icon not-found-icon" />
@@ -59,6 +58,7 @@
 <script>
 
 import BoxedLayout from '@/layouts/BoxedLayout.vue';
+
 export default {
   name: 'VerifyAccount',
   components: {
@@ -99,7 +99,7 @@ export default {
             this.userNotFound = (this.validationErrors._[0].msg
             === 'domain.user.validation.user_not_found');
           } else {
-            alert(`Something went wrong: ${error.response.status}`);
+            console.error(`Something went wrong: ${error.response.status}`);
           }
         });
     },
@@ -112,7 +112,6 @@ export default {
         verificationCode: this.verificationCode,
       })
         .then((response) => {
-          const that = this;
           this.loading = false;
           this.verified = true;
           setTimeout(() => {
@@ -124,7 +123,7 @@ export default {
           if (error.response.status === 422) {
             this.validationErrors = this.normalizeErrors(error.response);
           } else {
-            alert(`Something went wrong: ${error.response.status}`);
+            console.error(`Something went wrong: ${error.response.status}`);
           }
         });
     },

@@ -7,9 +7,11 @@
           <div style="margin: 0 auto; width: 180px; text-align: center">
             <!-- <img class="logo" src="@/assets/images/accounts-logo.svg" /> -->
             <div class="media" style="margin-top: 40px;margin-bottom: 50px;height: 30px;">
-              <img class="navbar-brand-img align-self-start mr-3" :src="logoImage" style="margin-left:5px;width:30px;height:30px" />
+              <img class="navbar-brand-img align-self-start mr-3" :src="logoImage"
+              style="margin-left:5px;width:30px;height:30px" />
               <div class="media-body">
-                <!-- <img class="" src="/images/logo_separator.png" style="floating:right;width: 1px; height:30px;margin-right: 5px;"/> -->
+                <!-- <img class="" src="/images/logo_separator.png"
+                style="floating:right;width: 1px; height:30px;margin-right: 5px;"/> -->
                 <img class="" :src="logoText" :style="logoTextStyle" />
               </div>
             </div>
@@ -37,15 +39,15 @@
 export default {
   computed: {
     logoImage() {
-      return this.$store.getters.logoImage
+      return this.$store.getters.logoImage;
     },
     logoText() {
-      return this.$store.getters.logoText
+      return this.$store.getters.logoText;
     },
     logoTextStyle() {
       return `padding-left:5px;height:30px;width:${this.$store.getters.logoTextWidth};`;
     },
-  }
+  },
 };
 </script>
 

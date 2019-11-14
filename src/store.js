@@ -58,13 +58,13 @@ export default new Vuex.Store({
         id: 4,
         text: 'apps.greenhouse',
         icon: 'outline-app-24px@2x.svg',
-        url: `${GREENHOUSE_URL}/{{ locale }}/dashboard`
+        url: `${process.env.VUE_APP_GREENHOUSE_URL}/{{ locale }}/dashboard`,
       },
       {
         id: 5,
         text: 'apps.wallet',
         icon: 'outline-app-24px@2x.svg',
-        url: `${WALLET_URL}/{{ locale }}/dashboard`,
+        url: `${process.env.VUE_APP_WALLET_URL}/{{ locale }}/dashboard`,
       },
     ],
   },

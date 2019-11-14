@@ -12,17 +12,22 @@
 
             <div class="row row-form view">
               <div class="col-md-3">
-                <picture-changer ref="pictureChanger" @picture-saved="onPictureSaved"></picture-changer>
+                <picture-changer ref="pictureChanger" @picture-saved="onPictureSaved">
+                </picture-changer>
               </div>
               <div class="col-md-7">
                 <h1 class="view__title">{{ fullname }}</h1>
                 <p class="view__subtitle">@{{ username }}</p>
-                <p><img class="view__icon" :src="require('@/assets/icons/outline-mail-24px@2x.svg')" /> {{ email }}</p>
-                <p><img class="view__icon" :src="require('@/assets/icons/outline-location_on-24px@2x.svg')" /> {{ countryName }}</p>
+                <p><img class="view__icon"
+                :src="require('@/assets/icons/outline-mail-24px@2x.svg')" /> {{ email }}</p>
+                <p><img class="view__icon"
+                :src="require('@/assets/icons/outline-location_on-24px@2x.svg')" />
+                {{ countryName }}</p>
                 <!-- <p>{{ createdAt | toDate('short') }}</p> -->
               </div>
               <div class="col-md-2">
-                  <button type="submit" class="btn btn-sm btn-primary btn-block mb-2" @click="editProfile()">{{ $t('common.modify') }}</button>
+                  <button type="submit" class="btn btn-sm btn-primary btn-block mb-2"
+                  @click="editProfile()">{{ $t('common.modify') }}</button>
               </div>
             </div>
 
@@ -36,6 +41,7 @@
 <script>
 import AppLayout from 'seed-theme/src/layouts/AppLayout.vue';
 import PictureChanger from 'seed-theme/src/components/PictureChanger.vue';
+
 export default {
   name: 'ProfileView',
   components: {
@@ -67,7 +73,7 @@ export default {
   methods: {
     getData() {
       this.loading = true;
-      this.axios.get(`/api/profile`)
+      this.axios.get('/api/profile')
         .then((result) => {
           this.loading = false;
           this.username = result.data.username;
@@ -85,16 +91,16 @@ export default {
           this.$refs.pictureChanger.loadImage(
             this.pictureUrl,
             `${this.$store.getters.user.id}.jpg`,
-            `/api/profile/change-picture`,
+            '/api/profile/change-picture',
           );
         })
-        .catch((error) => {
+        .catch(() => {
           this.loading = false;
           this.oops = true;
         });
     },
     onPictureSaved(newPictureUrl) {
-      let currentUser = this.$store.getters.user;
+      const currentUser = this.$store.getters.user;
       currentUser.picture = newPictureUrl;
       this.$store.dispatch('setUser', { user: currentUser });
     },
@@ -108,8 +114,8 @@ export default {
         return '';
       }
       return this.$i18n.t(`domain.countries.${this.countryCode}`);
-    }
-  }
+    },
+  },
 };
 </script>
 
