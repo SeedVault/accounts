@@ -194,9 +194,14 @@ module.exports = function(app) {
   // API
   app.get('/api/profiles/search', cors(corsAuth), api.searchProfiles);
 
+  // Reports
+  app.get('/api/referral-codes/report', api.getReferralCodesReport);
+
   // Profiles
   app.get('/api/profile', profile.view);
   app.post('/api/profile', profile.update);
   app.post('/api/profile/change-password', profile.changePassword);
   app.post('/api/profile/change-picture', upload.single('pictureFile'), profile.changePicture);
+
+
 }

@@ -86,6 +86,13 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "accounts" */ './views/ChangePassword.vue'),
           meta: { authenticated: true },
         },
+        {
+          path: 'referral-codes/report',
+          name: 'referral-codes-report',
+          /* eslint-ignore-next-line import/no-unresolved */
+          component: () => import(/* webpackChunkName: "accounts" */ './views/ReferralCodesReport.vue'),
+          meta: { authenticated: true },
+        },
       ],
     },
     {

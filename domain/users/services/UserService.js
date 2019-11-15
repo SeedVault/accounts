@@ -348,7 +348,6 @@ const UserService = {
         newPassword: plaintextNewPassword,
         repeatNewPassword: plaintextRepeatNewPassword
       });
-    console.log(data);
     await PasswordChange.check(data);
     let user = await UserService.loginWithPassword(data.email, data.password);
     if (user.accountStatus === AccountStatus.DISABLED) {
@@ -360,6 +359,15 @@ const UserService = {
     user.password = data.newPassword;
     await user.save();
   },
+
+  referralCodeReport: async () => {
+    const report = await User.find(
+      {},
+      'username firstname lastname referralCode email createdAt'
+    ).sort({ 'createdAt': -1 }).exec();
+    return report;
+  },
+
 };
 
 module.exports = {
