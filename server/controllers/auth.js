@@ -31,7 +31,7 @@ const auth = {
           res.redirect(response.redirect_to);
         });
       }
-      res.cookie('XSRF-TOKEN', req.csrfToken(), {secure: true});
+      // res.cookie('XSRF-TOKEN', req.csrfToken(), {secure: true});
       res.cookie('challenge', String(challenge), {secure: true});
       // Show sign in form
       res.redirect(`/${req.lang}/sign-in`);
@@ -207,7 +207,7 @@ const auth = {
       // We have a bunch of data available from the response, check out the
       // API docs to find what these values mean and what additional data
       // you have available.
-      res.cookie('XSRF-TOKEN', req.csrfToken(), {secure: true});
+      // res.cookie('XSRF-TOKEN', req.csrfToken(), {secure: true});
       res.cookie('challenge', String(challenge), {secure: true});
       // console.log(user);
       var data = {
