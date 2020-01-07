@@ -1,14 +1,17 @@
 <template>
-  <boxed-layout>
-    <div class="text-left">
-      <div class="text-center">
-        <h2>{{ $t('sign_up.sign_up') }}</h2>
-        <p><strong>{{ $t('sign_up.or') }}
+  <boxed-page>
+    <template v-slot:main>
+
+      <h1 class="display-1 text-dark text-center">
+        {{ $t('sign_up.sign_up') }}
+      </h1>
+      <p class="text-center font-weight-bold mb-4">
+        {{ $t('sign_up.or') }}
         <router-link :to="{ name: 'sign-in'}">{{ $t('sign_up.sign_in') }}</router-link>
-        </strong></p>
-      </div>
-      <div id="disclaimer" class="disclaimer" v-show="disclaimer">
-        <p>{{ $t('sign_up.disclaimer_text') }}</p>
+      </p>
+
+      <div v-show="disclaimer">
+        <p class="text-justify">{{ $t('sign_up.disclaimer_text') }}</p>
         <p>
           <i18n path="sign_up.disclaimer_text_2">
             <a slot="registration_url" href="https://developers.seedtoken.io/private-beta">
@@ -16,69 +19,83 @@
           </i18n>
         </p>
         <input type="button" :value="$t('sign_up.i_have_a_referral_code')"
-          class="btn btn-primary btn-lg btn-block mt-5" @click="disclaimer = false" />
+          class="btn btn-primary btn-lg btn-block mt-5 font-weight-bold"
+          @click="disclaimer = false" />
       </div>
+
+      <validation-box id="_" :validationErrors="validationErrors"></validation-box>
+
       <form @submit.prevent="signup" v-show="!disclaimer">
 
-        <input-text v-model="firstname" id="firstname" :label="$t('domain.user.first_name')"
-        :placeholder="$t('domain.user.your_first_name')" icon="outline-person-24px@2x.svg"
+        <input-text v-model="firstname" id="firstname"
+        :label="$t('domain.user.first_name')"
+        :placeholder="$t('domain.user.your_first_name')" icon="person"
         :validationErrors="validationErrors"></input-text>
 
-        <input-text v-model="lastname" id="lastname" :label="$t('domain.user.last_name')"
-          :placeholder="$t('domain.user.your_last_name')" icon="outline-person-24px@2x.svg"
-          :validationErrors="validationErrors"></input-text>
-
-        <input-text v-model="email" id="email" :label="$t('domain.user.email_address')"
-        :placeholder="$t('domain.user.your_email_address')"
-        icon="outline-mail-24px@2x.svg" :validationErrors="validationErrors"></input-text>
-
-        <input-text v-model="username" id="username" :label="$t('domain.user.username')"
-        :placeholder="$t('domain.user.your_username')" icon="outline-person-24px@2x.svg"
+        <input-text v-model="lastname" id="lastname"
+        :label="$t('domain.user.last_name')"
+        :placeholder="$t('domain.user.your_last_name')" icon="person"
         :validationErrors="validationErrors"></input-text>
 
-        <input-select v-model="countryCode" :options="countries" id="countryCode"
-        :label="$t('domain.user.country')" :placeholder="$t('domain.user.your_country')"
-        icon="outline-location_on-24px@2x.svg"
+        <input-text v-model="email" id="email"
+        :label="$t('domain.user.email_address')"
+        :placeholder="$t('domain.user.your_email_address')" icon="mail"
+        :validationErrors="validationErrors"></input-text>
+
+        <input-text v-model="username" id="username"
+        :label="$t('domain.user.username')"
+        :placeholder="$t('domain.user.your_username')" icon="person"
+        :validationErrors="validationErrors"></input-text>
+
+        <input-select v-model="countryCode" :options="countries()" id="countryCode"
+        :label="$t('domain.user.country')"
+        :placeholder="$t('domain.user.your_country')" icon="location"
         :validationErrors="validationErrors"></input-select>
 
-        <input-select v-model="role" :options="roles" id="role"
-        :label="$t('domain.user.role')" :placeholder="$t('domain.user.your_role')"
-        icon="outline-location_on-24px@2x.svg"
+        <input-select v-model="role" :options="roles()" id="role"
+        :label="$t('domain.user.role')"
+        :placeholder="$t('domain.user.your_role')" icon="widgets"
         :validationErrors="validationErrors"></input-select>
 
         <input-text v-model="referralCode" id="referralCode"
         :label="$t('domain.user.referral_code')"
-        :placeholder="$t('domain.user.your_referral_code')" icon="icon-key-24px.svg"
+        :placeholder="$t('domain.user.your_referral_code')" icon="key"
         :validationErrors="validationErrors"></input-text>
 
-        <input-password v-model="password" id="password" :label="$t('domain.user.password')"
-        :placeholder="$t('domain.user.your_password')" icon="outline-lock-24px@2x.svg"
+        <input-password v-model="password" id="password"
+        :label="$t('domain.user.password')"
+        :placeholder="$t('domain.user.your_password')" icon="lock"
         :validationErrors="validationErrors"></input-password>
 
         <input type="submit" id="accept" :value="$t('sign_up.sign_up_button')"
-        class="btn btn-primary btn-lg btn-block"/>
+        class="btn btn-primary btn-lg btn-block font-weight-bold"/>
+
+        <p class="text-black-50 mt-4">
+          <i18n path="sign_up.legal_disclaimer">
+            <router-link slot="terms" :to="{ name: 'legal-terms'}">
+              {{ $t('sign_up.terms') }}</router-link>
+            <router-link slot="privacy_policy" :to="{ name: 'legal-privacy'}">
+              {{ $t('sign_up.privacy_policy') }}</router-link>
+          </i18n>
+        </p>
 
       </form>
-      <div class="legal-footer" v-show="!disclaimer">
-        <i18n path="sign_up.legal_disclaimer">
-          <a slot="terms" href="#">{{ $t('sign_up.terms') }}</a>
-          <a slot="privacy_policy" href="#">{{ $t('sign_up.privacy_policy') }}</a>
-        </i18n>
-      </div>
-    </div>
-  </boxed-layout>
+
+    </template>
+  </boxed-page>
 </template>
+
 <script>
-import { mapGetters } from 'vuex';
-import BoxedLayout from '@/layouts/BoxedLayout.vue';
+import BoxedPage from 'seed-theme/src/layouts/BoxedPage.vue';
+import { reactive, toRefs } from '@vue/composition-api';
 
 export default {
   name: 'SignUp',
   components: {
-    BoxedLayout,
+    BoxedPage,
   },
-  data() {
-    return {
+  setup(props, context) {
+    const data = reactive({
       disclaimer: true,
       firstname: '',
       lastname: '',
@@ -89,78 +106,63 @@ export default {
       referralCode: '',
       password: '',
       validationErrors: [],
-    };
-  },
-  methods: {
-    signup() {
-      const that = this;
-      this.validationErrors = [];
-      this.axios.post(`/${this.$i18n.locale}/auth/sign-up`, {
-        username: this.username,
-        firstname: this.firstname,
-        lastname: this.lastname,
-        email: this.email,
-        countryCode: this.countryCode,
-        role: this.role,
-        referralCode: this.referralCode,
-        password: this.password,
-      })
-        .then(() => {
-          this.$router.push({ name: 'verify-account', query: { email: this.email } });
-        })
-        .catch((error) => {
-          if (error.response.status === 422) {
-            that.validationErrors = this.normalizeErrors(error.response);
-          } else {
-            console.error(error.response.status);
-          }
-        });
-    },
-  },
-  computed: {
-    ...mapGetters(['allCountries', 'allRoles']),
-    roles() {
+    });
+
+    function roles() {
       const roleList = [];
-      for (let i = 0; i < this.allRoles.length; i += 1) {
+      const { allRoles } = context.root.$store.getters;
+      for (let i = 0; i < allRoles.length; i += 1) {
         roleList.push({
-          value: this.allRoles[i],
-          text: this.$i18n.t(`domain.roles.${this.allRoles[i]}`),
+          value: allRoles[i],
+          text: context.root.$i18n.t(`domain.roles.${allRoles[i]}`),
         });
       }
       return roleList;
-    },
-    countries() {
+    }
+
+    function countries() {
       const countryList = [];
-      for (let i = 0; i < this.allCountries.length; i += 1) {
+      const { allCountries } = context.root.$store.getters;
+      for (let i = 0; i < allCountries.length; i += 1) {
         countryList.push({
-          value: this.allCountries[i],
-          text: this.$i18n.t(`domain.countries.${this.allCountries[i]}`),
+          value: allCountries[i],
+          text: context.root.$i18n.t(`domain.countries.${allCountries[i]}`),
         });
       }
-      // this.countryCode = 'us';
       return countryList;
-    },
+    }
+
+    async function signup() {
+      try {
+        data.validationErrors = [];
+        await context.root.axios.post('/auth/sign-up', {
+          username: data.username,
+          firstname: data.firstname,
+          lastname: data.lastname,
+          email: data.email,
+          countryCode: data.countryCode,
+          role: data.role,
+          referralCode: data.referralCode,
+          password: data.password,
+        });
+        context.root.$router.push({
+          name: 'verify-account',
+          query: {
+            email: data.email,
+          },
+        });
+      } catch (error) {
+        if (error.response && error.response.status === 422) {
+          data.validationErrors = context.root.normalizeErrors(error.response);
+        } else {
+          context.root.showFatalError(error);
+        }
+      }
+    }
+
+    return {
+      ...toRefs(data), roles, countries, signup,
+    };
   },
 };
 </script>
-
-<style lang="scss" scoped>
-
-h2 {
-  font-size: 48px;
-  color: #323743;
-  font-weight: 700;
-  margin-bottom: 5px;
-}
-
-.legal-footer {
-  margin: 30px 0px;
-  color: #a0a6ad;
-}
-
-.disclaimer {
-  margin-top: 2rem !important;
-  color: #323743;
-  text-align: justify;
-}
-</style>

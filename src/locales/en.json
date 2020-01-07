@@ -241,7 +241,8 @@
         "invalid_credentials": "Invalid credentials",
         "code_not_valid": "Code not valid",
         "referral_code_not_valid": "Referral code not valid",
-        "passwords_dont_match": "Passwords don't match"
+        "passwords_dont_match": "Passwords don't match",
+        "unauthorized_application": "Unauthorized application"
       }
     }
   },

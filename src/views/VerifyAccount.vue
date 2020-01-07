@@ -1,32 +1,33 @@
 <template>
-  <boxed-layout>
-    <div class="text-left">
+  <boxed-page>
+    <template v-slot:main>
 
-      <div id="user-not-found" class="text-center" v-if="userNotFound">
-        <img :src="require('@/assets/icons/outline-error_outline-20px@2x.svg')"
-          class="icon not-found-icon" />
-        <h3 class="error">{{ $t('domain.user.validation.user_not_found') }}</h3>
-      </div>
+      <centered-error-box
+        icon="error-red"
+        :message="$t('domain.user.validation.user_not_found')"
+        v-if="!userFound"
+      />
 
-      <div v-if="!userNotFound">
+      <div v-if="userFound">
 
-
-        <div id="sending" class="text-center">
-          <div v-bind:class="[{ 'load-complete': !loading }, 'circle-loader']">
-            <div class="checkmark draw" v-show="verified"></div>
-            <img :src="require('@/assets/icons/outline-mail-primary-24px@2x.svg')"
-            class="icon envelope-icon" v-show="sent && !loading && !verified" />
-          </div>
-          <div v-if="loading && !sent">
-            {{ $t('verify_account.sending_email') }}
-          </div>
-          <div v-if="loading && sent && !verified">
-            {{ $t('verify_account.verifying_code') }}
-          </div>
-          <div v-if="verified">
-            {{ $t('verify_account.verified') }}
-          </div>
-        </div>
+        <loading-checkmark visible="true" :loading="loading" :showCheckmark="verified">
+          <template v-slot:icons>
+            <img
+            :src="require('../../node_modules/seed-theme/src/assets/icons/mail-primary.svg?data')"
+            class="envelope-icon" v-show="sent && !loading && !verified" />
+          </template>
+          <template v-slot:messages>
+            <div v-if="loading && !sent">
+              {{ $t('verify_account.sending_email') }}
+            </div>
+            <div v-if="loading && sent && !verified">
+              {{ $t('verify_account.verifying_code') }}
+            </div>
+            <div v-if="verified">
+              {{ $t('verify_account.verified') }}
+            </div>
+          </template>
+        </loading-checkmark>
 
 
         <div id="code-form" v-if="sent && !loading && !verified">
@@ -37,138 +38,117 @@
 
             <input-text v-model="verificationCode" id="verificationCode"
             :label="$t('verify_account.please_enter_code')"
-            :placeholder="$t('verify_account.your_verification_code')"
-            type="text" icon="outline-lock-24px@2x.svg"
+            :placeholder="$t('verify_account.your_verification_code')" icon="lock"
             :validationErrors="validationErrors"></input-text>
 
             <input type="submit" id="verify" :value="$t('verify_account.verify')"
-            class="btn btn-primary btn-lg btn-block"/>
+            class="btn btn-primary btn-lg btn-block font-weight-bold"/>
 
-            <div class="resend-email-area">
+            <div class="mt-4 text-center resend">
               <a @click="sendMail">{{ $t('verify_account.resend_email') }}</a>
             </div>
 
           </form>
         </div>
+
       </div>
-    </div>
-  </boxed-layout>
+
+    </template>
+  </boxed-page>
 </template>
 
 <script>
-
-import BoxedLayout from '@/layouts/BoxedLayout.vue';
+import BoxedPage from 'seed-theme/src/layouts/BoxedPage.vue';
+import { reactive, toRefs } from '@vue/composition-api';
+import cookies from '@/config/cookies';
 
 export default {
   name: 'VerifyAccount',
   components: {
-    BoxedLayout,
+    BoxedPage,
   },
-  data() {
-    return {
-      userNotFound: false,
+  setup(props, context) {
+    const data = reactive({
+      userFound: true,
       loading: false,
       sent: false,
       verified: false,
       verificationCode: '',
       validationErrors: [],
+    });
+
+    async function sendMail() {
+      try {
+        data.validationErrors = [];
+        data.loading = true;
+        data.sent = false;
+        await context.root.axios.post('/auth/send-verification-email', {
+          email: context.root.$route.query.email,
+          locale: context.root.$i18n.locale,
+        });
+        setTimeout(() => { }, 1000);
+      } catch (error) {
+        if (error.response && error.response.status === 422) {
+          data.validationErrors = context.root.normalizeErrors(error.response);
+          data.userFound = (data.validationErrors._[0].msg
+            !== 'domain.user.validation.user_not_found');
+        } else {
+          context.root.showFatalError(error);
+        }
+      } finally {
+        data.sent = true;
+        data.loading = false;
+      }
+    }
+
+    async function verify() {
+      try {
+        data.validationErrors = [];
+        data.loading = true;
+        data.verified = false;
+        const response = await context.root.axios.post('/auth/verify-email-code', {
+          email: context.root.$route.query.email,
+          verificationCode: data.verificationCode,
+        });
+        data.loading = false;
+        data.verified = true;
+        setTimeout(() => { }, 1000);
+        const callbackURL = cookies.getCookie('callbackURL');
+        if (response.status === 200 && callbackURL !== '') {
+          window.location.href = callbackURL;
+        } else {
+          context.root.showFatalError(callbackURL);
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 422) {
+          data.validationErrors = context.root.normalizeErrors(error.response);
+        } else {
+          context.root.showFatalError(error);
+        }
+      } finally {
+        data.loading = false;
+      }
+    }
+
+    sendMail();
+
+    return {
+      ...toRefs(data), sendMail, verify,
     };
-  },
-  created() {
-    this.sendMail();
-  },
-  methods: {
-    sendMail() {
-      this.validationErrors = [];
-      this.loading = true;
-      this.sent = false;
-      this.code = '';
-      const that = this;
-      this.axios.post(`/${this.$i18n.locale}/auth/send-verification-email`, {
-        email: this.$route.query.email,
-      })
-        .then(() => {
-          // const that = this;
-          setTimeout(() => { that.sent = true; that.loading = false; }, 1000);
-        })
-        .catch((error) => {
-          this.sent = true;
-          this.loading = false;
-          if (error.response.status === 422) {
-            this.validationErrors = this.normalizeErrors(error.response);
-            this.userNotFound = (this.validationErrors._[0].msg
-            === 'domain.user.validation.user_not_found');
-          } else {
-            console.error(`Something went wrong: ${error.response.status}`);
-          }
-        });
-    },
-    verify() {
-      this.validationErrors = [];
-      this.loading = true;
-      this.verified = false;
-      this.axios.post(`/${this.$i18n.locale}/auth/verify-email-code`, {
-        email: this.$route.query.email,
-        verificationCode: this.verificationCode,
-      })
-        .then((response) => {
-          this.loading = false;
-          this.verified = true;
-          setTimeout(() => {
-            window.location.href = response.data.redirect;
-          }, 1000);
-        })
-        .catch((error) => {
-          this.loading = false;
-          if (error.response.status === 422) {
-            this.validationErrors = this.normalizeErrors(error.response);
-          } else {
-            console.error(`Something went wrong: ${error.response.status}`);
-          }
-        });
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.logo {
-  text-align: center;
-  margin-top: 37px;
-  margin-bottom: 60px;
-}
-
-h2 {
-  font-size: 48px;
-  color: #323743;
-  font-weight: 700;
-  margin-bottom: 5px;
-}
-
-h3.error {
-  color: #f5296a;
-}
-
-.resend-email-area {
-  margin-top: 30px;
-  text-align: center;
-
-  a {
-    &:hover {
-      cursor: pointer;
-      text-decoration: underline;
-    }
-  }
-}
-
 .envelope-icon {
   width:40px;
   padding-top:22px;
 }
 
-.not-found-icon {
-  width:90px;
-  padding-top:22px;
-  margin-bottom: 30px;
+.resend {
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 }
 </style>

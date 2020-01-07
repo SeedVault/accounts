@@ -241,7 +241,8 @@
         "invalid_credentials": "Credenciales no válidas",
         "code_not_valid": "El código no es válido",
         "referral_code_not_valid": "El código de referido no es válido",
-        "passwords_dont_match": "Las contraseñas son diferentes"
+        "passwords_dont_match": "Las contraseñas son diferentes",
+        "unauthorized_application": "Aplicación no autorizada"
       }
     }
   },
@@ -268,7 +269,7 @@
     "sign_in": "Iniciar sesión",
     "sign_up": "crear cuenta",
     "sign_in_button": "Ingresar",
-    "forgot_password": "¿Olvidaste tu constraseña?",
+    "forgot_password": "¿Olvidaste tu contraseña?",
     "keep_me_logged_in": "Recuérdame",
     "username_or_email_address": "Usuario ó correo electrónico"
   },
