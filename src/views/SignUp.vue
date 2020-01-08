@@ -25,7 +25,7 @@
 
       <validation-box id="_" :validationErrors="validationErrors"></validation-box>
 
-      <form @submit.prevent="signup" v-show="!disclaimer">
+      <form @submit.prevent="submit" v-show="!disclaimer">
 
         <input-text v-model="firstname" id="firstname"
         :label="$t('domain.user.first_name')"
@@ -67,6 +67,15 @@
         :placeholder="$t('domain.user.your_password')" icon="lock"
         :validationErrors="validationErrors"></input-password>
 
+        <vue-recaptcha
+          ref="recaptcha"
+          @verify="signup"
+          @expired="onCaptchaExpired"
+          size="invisible"
+          :sitekey="getRecaptchaSiteKey()"
+          :loadRecaptchaScript="true"
+        ></vue-recaptcha>
+
         <input type="submit" id="accept" :value="$t('sign_up.sign_up_button')"
         class="btn btn-primary btn-lg btn-block font-weight-bold"/>
 
@@ -87,12 +96,14 @@
 
 <script>
 import BoxedPage from 'seed-theme/src/layouts/BoxedPage.vue';
+import VueRecaptcha from 'vue-recaptcha';
 import { reactive, toRefs } from '@vue/composition-api';
 
 export default {
   name: 'SignUp',
   components: {
     BoxedPage,
+    VueRecaptcha,
   },
   setup(props, context) {
     const data = reactive({
@@ -107,6 +118,10 @@ export default {
       password: '',
       validationErrors: [],
     });
+
+    function getRecaptchaSiteKey() {
+      return process.env.VUE_APP_RECAPTCHA_SITE_KEY;
+    }
 
     function roles() {
       const roleList = [];
@@ -132,9 +147,18 @@ export default {
       return countryList;
     }
 
+    function submit() {
+      context.refs.recaptcha.execute();
+    }
+
+    function onCaptchaExpired() {
+      context.refs.recaptcha.reset();
+    }
+
     async function signup() {
       try {
         data.validationErrors = [];
+        context.refs.recaptcha.reset();
         await context.root.axios.post('/auth/sign-up', {
           username: data.username,
           firstname: data.firstname,
@@ -161,7 +185,7 @@ export default {
     }
 
     return {
-      ...toRefs(data), roles, countries, signup,
+      ...toRefs(data), roles, countries, signup, submit, onCaptchaExpired, getRecaptchaSiteKey,
     };
   },
 };
