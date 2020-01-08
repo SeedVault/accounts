@@ -90,6 +90,7 @@ export default {
       }
     }
 
+    let callbackURL = '';
     if (typeof context.root.$route.query.callbackURL !== 'undefined') {
       const whitelist = [
         process.env.VUE_APP_ACCOUNTS_URL,
@@ -102,10 +103,18 @@ export default {
       const url = `${protocol}//${host}`;
       data.appFound = whitelist.includes(url);
       if (data.appFound) {
-        const callbackURL = encodeURIComponent(context.root.$route.query.callbackURL);
-        document.cookie = `callbackURL=${callbackURL};domain=${window.location.hostname};path=/;samesite=strict;secure`;
+        callbackURL = encodeURIComponent(context.root.$route.query.callbackURL);
       }
+    } else {
+      const parts = window.location.hostname.split('.');
+      if (parts[0] === 'accounts-dev') {
+        parts[0] = 'greenhouse-dev';
+      } else {
+        parts[0] = 'greenhouse';
+      }
+      callbackURL = encodeURIComponent(`https://${parts[0]}.${parts[1]}.${parts[2]}`);
     }
+    document.cookie = `callbackURL=${callbackURL};domain=${window.location.hostname};path=/;samesite=strict;secure`;
 
     return { ...toRefs(data), login };
   },
