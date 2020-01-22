@@ -34,12 +34,21 @@
 
           <validation-box id="_" :validationErrors="validationErrors"></validation-box>
 
-          <form @submit.prevent="verify">
+          <form @submit.prevent="submit">
 
             <input-text v-model="verificationCode" id="verificationCode"
             :label="$t('verify_account.please_enter_code')"
             :placeholder="$t('verify_account.your_verification_code')" icon="lock"
             :validationErrors="validationErrors"></input-text>
+
+            <vue-recaptcha
+            ref="recaptcha"
+            @verify="verify"
+            @expired="onCaptchaExpired"
+            size="invisible"
+            :sitekey="getRecaptchaSiteKey()"
+            :loadRecaptchaScript="true"
+            ></vue-recaptcha>
 
             <input type="submit" id="verify" :value="$t('verify_account.verify')"
             class="btn btn-primary btn-lg btn-block font-weight-bold"/>
@@ -59,6 +68,7 @@
 
 <script>
 import BoxedPage from 'seed-theme/src/layouts/BoxedPage.vue';
+import VueRecaptcha from 'vue-recaptcha';
 import { reactive, toRefs } from '@vue/composition-api';
 import cookies from '@/config/cookies';
 
@@ -66,6 +76,7 @@ export default {
   name: 'VerifyAccount',
   components: {
     BoxedPage,
+    VueRecaptcha,
   },
   setup(props, context) {
     const data = reactive({
@@ -101,7 +112,19 @@ export default {
       }
     }
 
-    async function verify() {
+    function getRecaptchaSiteKey() {
+      return process.env.VUE_APP_RECAPTCHA_SITE_KEY;
+    }
+
+    function submit() {
+      context.refs.recaptcha.execute();
+    }
+
+    function onCaptchaExpired() {
+      context.refs.recaptcha.reset();
+    }
+
+    async function verify(recaptchaToken) {
       try {
         data.validationErrors = [];
         data.loading = true;
@@ -109,6 +132,7 @@ export default {
         const response = await context.root.axios.post('/auth/verify-email-code', {
           email: context.root.$route.query.email,
           verificationCode: data.verificationCode,
+          recaptchaToken,
         });
         data.loading = false;
         data.verified = true;
@@ -133,7 +157,12 @@ export default {
     sendMail();
 
     return {
-      ...toRefs(data), sendMail, verify,
+      ...toRefs(data),
+      sendMail,
+      verify,
+      submit,
+      onCaptchaExpired,
+      getRecaptchaSiteKey,
     };
   },
 };

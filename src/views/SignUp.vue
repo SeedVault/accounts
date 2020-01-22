@@ -155,7 +155,7 @@ export default {
       context.refs.recaptcha.reset();
     }
 
-    async function signup() {
+    async function signup(recaptchaToken) {
       try {
         data.validationErrors = [];
         context.refs.recaptcha.reset();
@@ -168,6 +168,7 @@ export default {
           role: data.role,
           referralCode: data.referralCode,
           password: data.password,
+          recaptchaToken,
         });
         context.root.$router.push({
           name: 'verify-account',

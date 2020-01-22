@@ -242,7 +242,8 @@
         "code_not_valid": "El código no es válido",
         "referral_code_not_valid": "El código de referido no es válido",
         "passwords_dont_match": "Las contraseñas son diferentes",
-        "unauthorized_application": "Aplicación no autorizada"
+        "unauthorized_application": "Aplicación no autorizada",
+        "invalid_recaptcha": "La verificación de reCAPTCHA no es válida"
       }
     }
   },

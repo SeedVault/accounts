@@ -51,13 +51,21 @@
 
       <div v-if="!loading && sent && userFound && !verified">
         <validation-box id="_" :validationErrors="validationErrors"></validation-box>
-        <form @submit.prevent="verify">
+        <form @submit.prevent="submit">
           <input-text v-model="verificationCode" id="verificationCode"
           :label="$t('forgot_password.please_enter_code')"
           :placeholder="$t('forgot_password.your_verification_code')" icon="lock"
           :validationErrors="validationErrors"></input-text>
           <input type="submit" id="verify" :value="$t('forgot_password.verify_code')"
           class="btn btn-primary btn-lg btn-block font-weight-bold"/>
+          <vue-recaptcha
+          ref="recaptcha"
+          @verify="verify"
+          @expired="onCaptchaExpired"
+          size="invisible"
+          :sitekey="getRecaptchaSiteKey()"
+          :loadRecaptchaScript="true"
+          ></vue-recaptcha>
           <div class="mt-4 text-center resend">
             <a @click="sendMail">{{ $t('forgot_password.resend_email') }}</a>
             </div>
@@ -88,6 +96,7 @@
 
 <script>
 import BoxedPage from 'seed-theme/src/layouts/BoxedPage.vue';
+import VueRecaptcha from 'vue-recaptcha';
 import { reactive, toRefs } from '@vue/composition-api';
 import cookies from '@/config/cookies';
 
@@ -95,6 +104,7 @@ export default {
   name: 'VerifyAccount',
   components: {
     BoxedPage,
+    VueRecaptcha,
   },
   setup(props, context) {
     const data = reactive({
@@ -110,7 +120,6 @@ export default {
       verificationCode: '',
       validationErrors: [],
     });
-
 
     async function sendMail() {
       try {
@@ -139,8 +148,19 @@ export default {
       }
     }
 
+    function getRecaptchaSiteKey() {
+      return process.env.VUE_APP_RECAPTCHA_SITE_KEY;
+    }
 
-    async function verify() {
+    function submit() {
+      context.refs.recaptcha.execute();
+    }
+
+    function onCaptchaExpired() {
+      context.refs.recaptcha.reset();
+    }
+
+    async function verify(recaptchaToken) {
       try {
         data.validationErrors = [];
         data.loading = true;
@@ -148,6 +168,7 @@ export default {
         await context.root.axios.post('/auth/verify-email-code', {
           email: data.email,
           verificationCode: data.verificationCode,
+          recaptchaToken,
         });
         data.verified = true;
         data.title = 'forgot_password.change_your_password';
@@ -196,7 +217,13 @@ export default {
     }
 
     return {
-      ...toRefs(data), sendMail, verify, changePassword,
+      ...toRefs(data),
+      sendMail,
+      verify,
+      changePassword,
+      submit,
+      onCaptchaExpired,
+      getRecaptchaSiteKey,
     };
   },
 };
