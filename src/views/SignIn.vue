@@ -96,6 +96,7 @@ export default {
         process.env.VUE_APP_ACCOUNTS_URL,
         process.env.VUE_APP_WALLET_URL,
         process.env.VUE_APP_GREENHOUSE_URL,
+        process.env.VUE_APP_STATS_URL,
       ];
       const pathArray = context.root.$route.query.callbackURL.split('/');
       const protocol = pathArray[0];
