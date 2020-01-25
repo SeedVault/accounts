@@ -10,7 +10,7 @@
         <router-link :to="{ name: 'sign-in'}">{{ $t('sign_up.sign_in') }}</router-link>
       </p>
 
-      <div v-show="disclaimer">
+      <div v-show="disclaimer && !isBetaOnline()">
         <p class="text-justify">{{ $t('sign_up.disclaimer_text') }}</p>
         <p>
           <i18n path="sign_up.disclaimer_text_2">
@@ -25,7 +25,7 @@
 
       <validation-box id="_" :validationErrors="validationErrors"></validation-box>
 
-      <form @submit.prevent="submit" v-show="!disclaimer">
+      <form @submit.prevent="submit" v-show="!disclaimer || isBetaOnline()">
 
         <input-text v-model="firstname" id="firstname"
         :label="$t('domain.user.first_name')"
@@ -60,6 +60,7 @@
         <input-text v-model="referralCode" id="referralCode"
         :label="$t('domain.user.referral_code')"
         :placeholder="$t('domain.user.your_referral_code')" icon="key"
+        v-show="!isBetaOnline()"
         :validationErrors="validationErrors"></input-text>
 
         <input-password v-model="password" id="password"
@@ -118,6 +119,10 @@ export default {
       password: '',
       validationErrors: [],
     });
+
+    function isBetaOnline() {
+      return process.env.VUE_APP_API_BETA_ONLINE === 'yes';
+    }
 
     function getRecaptchaSiteKey() {
       return process.env.VUE_APP_RECAPTCHA_SITE_KEY;
@@ -186,7 +191,14 @@ export default {
     }
 
     return {
-      ...toRefs(data), roles, countries, signup, submit, onCaptchaExpired, getRecaptchaSiteKey,
+      ...toRefs(data),
+      isBetaOnline,
+      roles,
+      countries,
+      signup,
+      submit,
+      onCaptchaExpired,
+      getRecaptchaSiteKey,
     };
   },
 };
